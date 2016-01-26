@@ -18,7 +18,7 @@ namespace LovroLog
         public LovroContext(string connString)
             : base(connString)
         {
-            //Database.SetInitializer<LovroContext>(new DropCreateDatabaseIfModelChanges<LovroContext>());
+            System.Data.Entity.Database.SetInitializer<LovroContext>(new DropCreateDatabaseIfModelChanges<LovroContext>());
         }
     }
 }
