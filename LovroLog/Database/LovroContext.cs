@@ -15,33 +15,10 @@ namespace LovroLog
         public DbSet<LovroDiaperChangedEvent> DiaperChangedEvents { get; set; }
         public DbSet<DatabaseSummary> Summaries { get; set; }
 
-        //public IEnumerable<LovroBaseEvent> GetBaseEvents()
-        //{
-        //    return this.BaseEvents;
-        //}
-
-        //public IEnumerable<LovroDiaperChangedEvent> GetDiaperChangedEvents()
-        //{
-        //    return this.DiaperChangedEvents;
-        //}
-
-        //public IEnumerable<DatabaseSummary> GetSummaries()
-        //{
-        //    return this.Summaries;
-        //}
-
-        //public LovroBaseEvent AddBaseEvent(LovroBaseEvent eventToAdd)
-        //{
-        //    LovroBaseEvent resultEvent = this.BaseEvents.Add(eventToAdd);
-        //    this.SaveChanges();
-
-        //    return resultEvent;
-        //}
-
         public LovroContext(string connString)
             : base(connString)
         {
-            Database.SetInitializer<LovroContext>(new DropCreateDatabaseIfModelChanges<LovroContext>());
+            //Database.SetInitializer<LovroContext>(new DropCreateDatabaseIfModelChanges<LovroContext>());
         }
     }
 }
