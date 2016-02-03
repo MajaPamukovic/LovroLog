@@ -153,6 +153,8 @@
     <None Include="Resursi\diaper-wet-60.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resursi\digital-7 %28italic%29.ttf" />
+    <None Include="Resursi\digital-7.ttf" />
     <None Include="Resursi\food-20px.png" />
   </ItemGroup>
   <ItemGroup>
