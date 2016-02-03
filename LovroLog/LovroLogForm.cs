@@ -1,4 +1,5 @@
-﻿using LovroLog.Enums;
+﻿using LovroLog.Database;
+using LovroLog.Enums;
 using LovroLog.LovroEvents;
 using LovroLog.Properties;
 using System;
@@ -36,7 +37,8 @@ namespace LovroLog
         private bool warningDisplayed = false;
         private bool ignoreWarnings = false;
         private DateTime warningLastSet, warningLastIgnored;
-
+        private bool useXMLDatabase = false; // TODO move to app.config
+        
         #region Timers
         private System.Threading.Timer refreshLogViewTimer;
         private System.Threading.Timer soundWarningTimer;
@@ -56,7 +58,7 @@ namespace LovroLog
                 warnHasNotBathedAfterDays = defaultWarnHasNotBathedAfterDays;
 
             connectionString = ConfigurationManager.AppSettings.Get("DatabaseConnectionString");
-
+            
             logListView.View = View.Details;
             logListView.GridLines = false;
             logListView.Scrollable = true;
@@ -142,12 +144,9 @@ namespace LovroLog
                 return;
             }
 
-            using (var context = new LovroContext(connectionString))
+            using (var dataAccess = new DataAccessWrapper(connectionString, useXMLDatabase))
             {
-                //context.AddBaseEvent(lovroEvent);
-
-                context.BaseEvents.Add(lovroEvent);
-                context.SaveChanges();
+                dataAccess.AddBaseEvent(lovroEvent);
             }
         }
 
@@ -272,7 +271,7 @@ namespace LovroLog
                 viewItem.ImageIndex = imageIndex;
         }
 
-        private ListViewItem CreateViewItem(LovroBaseEvent lovroEvent, LovroContext context)
+        private ListViewItem CreateViewItem(LovroBaseEvent lovroEvent, DataAccessWrapper dataAccess)
         {
             ListViewItem viewItem = new ListViewItem(lovroEvent.Time.ToString());
             viewItem.Tag = lovroEvent.ID;
@@ -291,12 +290,12 @@ namespace LovroLog
 
             if (lovroEvent.Type == LovroEventType.DiaperChanged)
             {
-                LovroBaseEvent diaperLastChanged = context.BaseEvents.Where(item => item.Type == LovroEventType.DiaperChanged && item.ID != lovroEvent.ID && item.Time < lovroEvent.Time).OrderByDescending(item => item.Time).FirstOrDefault();
+                LovroBaseEvent diaperLastChanged = dataAccess.GetBaseEvents().Where(item => item.Type == LovroEventType.DiaperChanged && item.ID != lovroEvent.ID && item.Time < lovroEvent.Time).OrderByDescending(item => item.Time).FirstOrDefault();
                 viewItem.SubItems.Add(diaperLastChanged == null ? "" : (lovroEvent.Time - diaperLastChanged.Time).ToString(@"hh\:mm"));
             }
             else if (lovroEvent.Type == LovroEventType.WokeUp)
             {
-                LovroBaseEvent lastFellAsleepEvent = context.BaseEvents.Where(item => item.Type == LovroEventType.FellAsleep && item.Time < lovroEvent.Time).OrderByDescending(item => item.Time).FirstOrDefault();
+                LovroBaseEvent lastFellAsleepEvent = dataAccess.GetBaseEvents().Where(item => item.Type == LovroEventType.FellAsleep && item.Time < lovroEvent.Time).OrderByDescending(item => item.Time).FirstOrDefault();
                 if (lastFellAsleepEvent != null)
                     viewItem.SubItems.Add((lovroEvent.Time - lastFellAsleepEvent.Time).ToString(@"hh\:mm"));
             }
@@ -312,16 +311,15 @@ namespace LovroLog
 
         private void RefreshLines(object state)
         {
-            using (var context = new LovroContext(connectionString))
+            using (var dataAccess = new DataAccessWrapper(connectionString, useXMLDatabase))
             {
-                DatabaseSummary summary = context.Summaries.FirstOrDefault();
-
+                DatabaseSummary summary = dataAccess.GetSummary();
                 if (summary != null)
                     lastDataUpdate = summary.LastModified;
                 else
                     lastDataUpdate = DateTime.MinValue.AddSeconds(1);
             }
-
+            
             if (lastDataUpdate > lastRedraw)
             {
                 if (logListView.InvokeRequired)
@@ -333,7 +331,7 @@ namespace LovroLog
                 {
                     logListView.Items.Clear();
 
-                    using (var context = new LovroContext(connectionString))
+                    using (var dataAccess = new DataAccessWrapper(connectionString, useXMLDatabase))
                     {
                         LovroEventType typeFilter = LovroEventType.Default;
                         if (!Enum.TryParse(((KeyValuePair<string, string>)filterByTypeComboBox.SelectedItem).Key, out typeFilter))
@@ -342,8 +340,8 @@ namespace LovroLog
                         DateTime dateFilter = displayedDatePicker.Value.Date;
 
                         #region Displaying individual items
-                        
-                        foreach (LovroBaseEvent lovroEvent in context.BaseEvents.OrderBy(item => item.Time))
+
+                        foreach (LovroBaseEvent lovroEvent in dataAccess.GetBaseEvents().OrderBy(item => item.Time))
                         {
                             if (filterByTypeCheckBox.Checked && typeFilter != LovroEventType.Default && typeFilter != lovroEvent.Type)
                                 continue;
@@ -351,7 +349,7 @@ namespace LovroLog
                             if (filterByDateCheckBox.Checked && dateFilter != lovroEvent.Time.Date)
                                 continue;
 
-                            ListViewItem viewItem = CreateViewItem(lovroEvent, context);
+                            ListViewItem viewItem = CreateViewItem(lovroEvent, dataAccess);
                             logListView.Items.Add(viewItem);
 
                             if (viewItem.Index % 2 == 0)
@@ -360,10 +358,10 @@ namespace LovroLog
                             logListView.TopItem = viewItem;
                             logListView.EnsureVisible(logListView.Items.Count - 1);
                         }
-                        
+
                         logListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
                         Refresh();
-                        
+
                         #endregion
 
                         #region Displaying summary info
@@ -378,8 +376,9 @@ namespace LovroLog
                         #region Calculating total nap time
 
                         TimeSpan totalNapTime = TimeSpan.Zero;
-                        IEnumerable<LovroBaseEvent> wakeUpEvents = context.BaseEvents.Where(item => item.Time >= today && item.Time < tomorrow && item.Type == LovroEventType.WokeUp);
-                        IEnumerable<LovroBaseEvent> correspondingFellAsleepEvents = wakeUpEvents.Select(wakeUpEvent => context.BaseEvents.OrderByDescending(item => item.Time).FirstOrDefault(item => item.Type == LovroEventType.FellAsleep && wakeUpEvent.Time > item.Time));
+
+                        IEnumerable<LovroBaseEvent> wakeUpEvents = dataAccess.GetBaseEvents().Where(item => item.Time >= today && item.Time < tomorrow && item.Type == LovroEventType.WokeUp);
+                        IEnumerable<LovroBaseEvent> correspondingFellAsleepEvents = wakeUpEvents.Select(wakeUpEvent => dataAccess.GetBaseEvents().OrderByDescending(item => item.Time).FirstOrDefault(item => item.Type == LovroEventType.FellAsleep && wakeUpEvent.Time > item.Time));
 
                         wakeUpCount = wakeUpEvents.Count();
                         if (wakeUpCount != correspondingFellAsleepEvents.Count())
@@ -403,8 +402,8 @@ namespace LovroLog
 
                         #endregion
 
-                        diapersChangedCount = context.DiaperChangedEvents.Count(item => item.Time >= today && item.Time < tomorrow);
-                        feedingTimesCount = context.BaseEvents.Count(item => item.Type == LovroEventType.AteFood && item.Time >= today && item.Time < tomorrow);
+                        diapersChangedCount = dataAccess.GetDiaperChangedEvents().Count(item => item.Time >= today && item.Time < tomorrow);
+                        feedingTimesCount = dataAccess.GetBaseEvents().Count(item => item.Type == LovroEventType.AteFood && item.Time >= today && item.Time < tomorrow);
 
                         summaryLabel.Text = string.Concat("Tokom dana ukupno spavao: ", totalNapTime.ToString(@"hh\:mm"), " sati, jeo ", feedingTimesCount, " puta, promijenjeno ", diapersChangedCount, " pelena");
 

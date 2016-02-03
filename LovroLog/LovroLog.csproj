@@ -60,6 +60,8 @@
     <Compile Include="AskForDetailsForm.Designer.cs">
       <DependentUpon>AskForDetailsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Database\DataAccessWrapper.cs" />
+    <Compile Include="Database\DataAccessXML.cs" />
     <Compile Include="Database\DatabaseSummary.cs" />
     <Compile Include="Database\IDataAccess.cs" />
     <Compile Include="Enums\LovroDiaperStatus.cs" />

@@ -7,13 +7,16 @@ using System.Threading.Tasks;
 
 namespace LovroLog.Database
 {
-    public interface IDataAccess
+    public interface IDataAccess : IDisposable
     {
+        string DataAccessDetails { get; set; } // UNC path of the folder containing XML files or connection string to the database
+
         IEnumerable<LovroBaseEvent> GetBaseEvents();
         IEnumerable<LovroDiaperChangedEvent> GetDiaperChangedEvents();
-        IEnumerable<DatabaseSummary> GetSummaries();
+        DatabaseSummary GetSummary();
 
-        LovroBaseEvent AddBaseEvent();
-        //int SaveChanges();
+        LovroBaseEvent AddBaseEvent(LovroBaseEvent newEvent);
+        LovroBaseEvent EditBaseEvent(LovroBaseEvent editedEvent);
+        void DeleteBaseEvent(int id);
     }
 }

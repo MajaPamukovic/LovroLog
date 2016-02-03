@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LovroLog
 {
-    public class LovroContext : DbContext//, IDataAccess // WTF, nezgodno
+    public class LovroContext : DbContext
     {
         public DbSet<LovroBaseEvent> BaseEvents { get; set; }
         public DbSet<LovroDiaperChangedEvent> DiaperChangedEvents { get; set; }
