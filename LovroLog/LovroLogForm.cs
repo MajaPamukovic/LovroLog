@@ -35,8 +35,7 @@ namespace LovroLog
         private DateTime lastRedraw;
         private System.Media.SoundPlayer player;
         private bool warningDisplayed = false;
-        private bool ignoreWarnings = false;
-        private DateTime warningLastSet, warningLastIgnored;
+        private DateTime lastWarningConditionSetRelatedToDiaperChangeAt;
         private bool useXMLDatabase = false; // TODO move to app.config
         
         #region Timers
@@ -74,15 +73,14 @@ namespace LovroLog
             logDisplayed = false;
             lastDataUpdate = DateTime.MinValue;
             lastRedraw = DateTime.MinValue;
-            warningLastSet = DateTime.MinValue;
-            warningLastIgnored = DateTime.MinValue;
+            lastWarningConditionSetRelatedToDiaperChangeAt = DateTime.MinValue;
 
             refreshLogViewTimer = new System.Threading.Timer(this.RefreshLines, null, 0, 300);
             soundWarningTimer = new System.Threading.Timer(this.CheckSoundWarning, null, 1000, 1000);
             stopwatchTimer = new System.Threading.Timer(this.RefreshStopwatch, null, 1500, 1000);
         }
 
-        private int GetDiaperChangeWarningLimitInMinutes()
+        private double GetDiaperChangeWarningLimitInMinutes()
         {
             return warnDiaperUnchangedAfterHrs * 60;
         }
@@ -468,28 +466,26 @@ namespace LovroLog
             {
                 LovroDiaperChangedEvent lastDiaperChangedEvent = context.DiaperChangedEvents.OrderByDescending(item => item.Time).FirstOrDefault();
 
-                //if (!ignoreWarnings && lastDiaperChangedEvent != null && DateTime.Now > lastDiaperChangedEvent.Time.AddMinutes(GetDiaperChangeWarningLimitInMinutes()))
                 if (lastDiaperChangedEvent != null && DateTime.Now > lastDiaperChangedEvent.Time.AddMinutes(GetDiaperChangeWarningLimitInMinutes()))
                 {
-                    if (!ignoreWarnings || warningLastSet > warningLastIgnored) // ??? WTF? TODO
+                    if (lastWarningConditionSetRelatedToDiaperChangeAt < lastDiaperChangedEvent.Time)
                     {
                         player = new System.Media.SoundPlayer(@"c:\windows\media\Windows Battery Critical.wav");
                         player.PlayLooping();
+                        lastWarningConditionSetRelatedToDiaperChangeAt = lastDiaperChangedEvent.Time;
 
                         if (!warningDisplayed)
                         {
-                            warningLastSet = DateTime.Now;
+                            lastWarningConditionSetRelatedToDiaperChangeAt = lastDiaperChangedEvent.Time;
                             using (var form = new ShowWarningForm())
                             {
                                 warningDisplayed = true;
                                 var result = form.ShowDialog();
                                 if (result == DialogResult.OK && player != null)
                                 {
+                                    warningDisplayed = false;
                                     player.Stop();
                                     player.Dispose();
-                                    ignoreWarnings = true;
-                                    warningLastIgnored = DateTime.Now;
-                                    warningLastSet = DateTime.MinValue;
                                 }
                             }
                         }
@@ -675,6 +671,15 @@ namespace LovroLog
         private void ForceRefresh()
         {
             lastRedraw = DateTime.MinValue;
+        }
+
+        private void logListView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode.HasFlag(Keys.Delete))
+                DeleteEvents();
+
+            if (e.KeyCode.HasFlag(Keys.F2))
+                EditEvent();
         }
     }
 }

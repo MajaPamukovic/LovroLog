@@ -46,14 +46,17 @@
             this.RefreshLogViewButton = new System.Windows.Forms.Button();
             this.filterByDateCheckBox = new System.Windows.Forms.CheckBox();
             this.rightSidePanel = new System.Windows.Forms.Panel();
+            this.editEventButton = new System.Windows.Forms.Button();
+            this.deleteEventButton = new System.Windows.Forms.Button();
             this.logListView = new System.Windows.Forms.ListView();
             this.frogALogLabel = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.otherEventButton = new System.Windows.Forms.Button();
             this.toggleLogPBoxBtn = new System.Windows.Forms.PictureBox();
             this.stopwatchSleepPictureBox = new System.Windows.Forms.PictureBox();
             this.stopwatchFoodPictureBox = new System.Windows.Forms.PictureBox();
             this.stopwatchDiaperPictureBox = new System.Windows.Forms.PictureBox();
+            this.logoPictureBox = new System.Windows.Forms.PictureBox();
+            this.otherEventButton = new System.Windows.Forms.Button();
             this.poopyDiaperChangedButton = new System.Windows.Forms.Button();
             this.bathedButton = new System.Windows.Forms.Button();
             this.wetDiaperChangedButton = new System.Windows.Forms.Button();
@@ -61,9 +64,6 @@
             this.fellAsleep = new System.Windows.Forms.Button();
             this.foodButton = new System.Windows.Forms.Button();
             this.shitButton = new System.Windows.Forms.Button();
-            this.editEventButton = new System.Windows.Forms.Button();
-            this.deleteEventButton = new System.Windows.Forms.Button();
-            this.logoPictureBox = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.filterByTypeGroupBox.SuspendLayout();
             this.dateGroupBox.SuspendLayout();
@@ -207,7 +207,7 @@
             // summaryLabel
             // 
             this.summaryLabel.AutoSize = true;
-            this.summaryLabel.Location = new System.Drawing.Point(4, 612);
+            this.summaryLabel.Location = new System.Drawing.Point(6, 562);
             this.summaryLabel.Name = "summaryLabel";
             this.summaryLabel.Size = new System.Drawing.Size(52, 13);
             this.summaryLabel.TabIndex = 11;
@@ -215,7 +215,7 @@
             // 
             // RefreshLogViewButton
             // 
-            this.RefreshLogViewButton.Location = new System.Drawing.Point(468, 607);
+            this.RefreshLogViewButton.Location = new System.Drawing.Point(463, 557);
             this.RefreshLogViewButton.Name = "RefreshLogViewButton";
             this.RefreshLogViewButton.Size = new System.Drawing.Size(75, 23);
             this.RefreshLogViewButton.TabIndex = 10;
@@ -253,14 +253,35 @@
             this.rightSidePanel.Size = new System.Drawing.Size(548, 635);
             this.rightSidePanel.TabIndex = 26;
             // 
+            // editEventButton
+            // 
+            this.editEventButton.Image = global::LovroLog.Properties.Resources.edit_darker_20px;
+            this.editEventButton.Location = new System.Drawing.Point(503, 54);
+            this.editEventButton.Name = "editEventButton";
+            this.editEventButton.Size = new System.Drawing.Size(40, 36);
+            this.editEventButton.TabIndex = 20;
+            this.editEventButton.UseVisualStyleBackColor = true;
+            this.editEventButton.Click += new System.EventHandler(this.editEventButton_Click);
+            // 
+            // deleteEventButton
+            // 
+            this.deleteEventButton.Image = global::LovroLog.Properties.Resources.Delete_20px;
+            this.deleteEventButton.Location = new System.Drawing.Point(436, 53);
+            this.deleteEventButton.Name = "deleteEventButton";
+            this.deleteEventButton.Size = new System.Drawing.Size(40, 36);
+            this.deleteEventButton.TabIndex = 19;
+            this.deleteEventButton.UseVisualStyleBackColor = true;
+            this.deleteEventButton.Click += new System.EventHandler(this.deleteEventButton_Click);
+            // 
             // logListView
             // 
             this.logListView.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.logListView.Location = new System.Drawing.Point(4, 107);
             this.logListView.Name = "logListView";
-            this.logListView.Size = new System.Drawing.Size(539, 500);
+            this.logListView.Size = new System.Drawing.Size(539, 444);
             this.logListView.TabIndex = 9;
             this.logListView.UseCompatibleStateImageBehavior = false;
+            this.logListView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.logListView_KeyDown);
             this.logListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.logListView_MouseDoubleClick);
             // 
             // frogALogLabel
@@ -272,21 +293,6 @@
             this.frogALogLabel.Size = new System.Drawing.Size(307, 74);
             this.frogALogLabel.TabIndex = 27;
             this.frogALogLabel.Text = "Frog-A-Log";
-            // 
-            // otherEventButton
-            // 
-            this.otherEventButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.otherEventButton.Font = new System.Drawing.Font("Segoe Script", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.otherEventButton.Image = global::LovroLog.Properties.Resources.ellipsis_60px;
-            this.otherEventButton.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.otherEventButton.Location = new System.Drawing.Point(347, 281);
-            this.otherEventButton.Name = "otherEventButton";
-            this.otherEventButton.Size = new System.Drawing.Size(154, 102);
-            this.otherEventButton.TabIndex = 31;
-            this.otherEventButton.Text = "Razno...";
-            this.otherEventButton.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.otherEventButton.UseVisualStyleBackColor = false;
-            this.otherEventButton.Click += new System.EventHandler(this.otherEventButton_Click);
             // 
             // toggleLogPBoxBtn
             // 
@@ -336,6 +342,32 @@
             this.stopwatchDiaperPictureBox.TabIndex = 21;
             this.stopwatchDiaperPictureBox.TabStop = false;
             this.toolTip1.SetToolTip(this.stopwatchDiaperPictureBox, "Vrijeme proteklo od posljednje promjene pelena");
+            // 
+            // logoPictureBox
+            // 
+            this.logoPictureBox.Image = global::LovroLog.Properties.Resources.frog_icon;
+            this.logoPictureBox.Location = new System.Drawing.Point(334, 429);
+            this.logoPictureBox.Name = "logoPictureBox";
+            this.logoPictureBox.Size = new System.Drawing.Size(184, 180);
+            this.logoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.logoPictureBox.TabIndex = 28;
+            this.logoPictureBox.TabStop = false;
+            this.toolTip1.SetToolTip(this.logoPictureBox, "Bok, ja sam žaba!");
+            // 
+            // otherEventButton
+            // 
+            this.otherEventButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.otherEventButton.Font = new System.Drawing.Font("Segoe Script", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.otherEventButton.Image = global::LovroLog.Properties.Resources.ellipsis_60px;
+            this.otherEventButton.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.otherEventButton.Location = new System.Drawing.Point(347, 281);
+            this.otherEventButton.Name = "otherEventButton";
+            this.otherEventButton.Size = new System.Drawing.Size(154, 102);
+            this.otherEventButton.TabIndex = 31;
+            this.otherEventButton.Text = "Razno...";
+            this.otherEventButton.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.otherEventButton.UseVisualStyleBackColor = false;
+            this.otherEventButton.Click += new System.EventHandler(this.otherEventButton_Click);
             // 
             // poopyDiaperChangedButton
             // 
@@ -442,37 +474,6 @@
             this.shitButton.UseVisualStyleBackColor = false;
             this.shitButton.Click += new System.EventHandler(this.ShitButton_Click);
             // 
-            // editEventButton
-            // 
-            this.editEventButton.Image = global::LovroLog.Properties.Resources.edit_darker_20px;
-            this.editEventButton.Location = new System.Drawing.Point(503, 54);
-            this.editEventButton.Name = "editEventButton";
-            this.editEventButton.Size = new System.Drawing.Size(40, 36);
-            this.editEventButton.TabIndex = 20;
-            this.editEventButton.UseVisualStyleBackColor = true;
-            this.editEventButton.Click += new System.EventHandler(this.editEventButton_Click);
-            // 
-            // deleteEventButton
-            // 
-            this.deleteEventButton.Image = global::LovroLog.Properties.Resources.Delete_20px;
-            this.deleteEventButton.Location = new System.Drawing.Point(436, 53);
-            this.deleteEventButton.Name = "deleteEventButton";
-            this.deleteEventButton.Size = new System.Drawing.Size(40, 36);
-            this.deleteEventButton.TabIndex = 19;
-            this.deleteEventButton.UseVisualStyleBackColor = true;
-            this.deleteEventButton.Click += new System.EventHandler(this.deleteEventButton_Click);
-            // 
-            // logoPictureBox
-            // 
-            this.logoPictureBox.Image = global::LovroLog.Properties.Resources.frog_icon;
-            this.logoPictureBox.Location = new System.Drawing.Point(334, 488);
-            this.logoPictureBox.Name = "logoPictureBox";
-            this.logoPictureBox.Size = new System.Drawing.Size(184, 180);
-            this.logoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.logoPictureBox.TabIndex = 28;
-            this.logoPictureBox.TabStop = false;
-            this.toolTip1.SetToolTip(this.logoPictureBox, "Bok, ja sam žaba!");
-            // 
             // pictureBox2
             // 
             this.pictureBox2.BackgroundImage = global::LovroLog.Properties.Resources.pruga2;
@@ -488,7 +489,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(183)))), ((int)(((byte)(235)))), ((int)(((byte)(206)))));
-            this.ClientSize = new System.Drawing.Size(539, 642);
+            this.ClientSize = new System.Drawing.Size(539, 582);
             this.Controls.Add(this.otherEventButton);
             this.Controls.Add(this.toggleLogPBoxBtn);
             this.Controls.Add(this.stopwatchSleepPictureBox);
@@ -510,8 +511,8 @@
             this.Controls.Add(this.logoPictureBox);
             this.Controls.Add(this.pictureBox2);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(1106, 680);
-            this.MinimumSize = new System.Drawing.Size(555, 680);
+            this.MaximumSize = new System.Drawing.Size(1106, 620);
+            this.MinimumSize = new System.Drawing.Size(555, 620);
             this.Name = "LovroLogForm";
             this.Text = "Frog-A-Log";
             this.Load += new System.EventHandler(this.LovroLogForm_Load);
