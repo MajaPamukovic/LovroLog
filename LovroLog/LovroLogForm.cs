@@ -37,6 +37,8 @@ namespace LovroLog
         private bool warningDisplayed = false;
         private DateTime lastWarningConditionSetRelatedToDiaperChangeAt;
         private bool useXMLDatabase = false; // TODO move to app.config
+        private Dictionary<int, DateTime> erroneousEvents;
+        private int? errorSelectedItemID;
         
         #region Timers
         private System.Threading.Timer refreshLogViewTimer;
@@ -358,6 +360,7 @@ namespace LovroLog
                         }
 
                         logListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                        PointToErroneousEvent();
                         Refresh();
 
                         #endregion
@@ -529,6 +532,7 @@ namespace LovroLog
         private void displayedDatePicker_ValueChanged(object sender, EventArgs e)
         {
             ForceRefresh();
+            //RefreshLogViewDelegateInstance();
         }
 
         private void filterByTypeComboBox_SelectedValueChanged(object sender, EventArgs e)
@@ -680,6 +684,70 @@ namespace LovroLog
 
             if (e.KeyCode.HasFlag(Keys.F2))
                 EditEvent();
+        }
+
+        private void viewSleepChartButton_Click(object sender, EventArgs e)
+        {
+            using (var form = new SleepChartForm(connectionString, useXMLDatabase))
+            {
+                var result = form.ShowDialog();
+                if (form.SelectedDate.HasValue)
+                    displayedDatePicker.Value = form.SelectedDate.Value;
+            }
+        }
+
+        private void AnalyzeDataButton_Click(object sender, EventArgs e)
+        {
+            erroneousEvents = new Dictionary<int, DateTime>();
+            
+            using (var dataAccessWrapper = new DataAccessWrapper(connectionString, useXMLDatabase))
+            {
+                List<LovroBaseEvent> napEvents = dataAccessWrapper.GetBaseEvents().Where(item => item.Type == LovroEventType.FellAsleep || item.Type == LovroEventType.WokeUp).OrderBy(item => item.Time).ToList();
+
+                bool typeChanged = true, firstGo = true;
+                LovroEventType lastType = LovroEventType.FellAsleep; // svejedno
+                foreach (LovroBaseEvent lovroEvent in napEvents)
+                {
+                    typeChanged = false;
+
+                    if (firstGo || lastType != lovroEvent.Type)
+                        typeChanged = true;
+
+                    if (!typeChanged)
+                        erroneousEvents.Add(lovroEvent.ID, lovroEvent.Time);
+
+                    firstGo = false;
+                    lastType = lovroEvent.Type;
+                }
+            }
+
+            using (var errorsDisplayForm = new ErroneousEventsListForm(erroneousEvents))
+            {
+                errorSelectedItemID = null;
+                errorsDisplayForm.ShowDialog();
+                if (errorsDisplayForm.SelectedDate.HasValue)
+                {
+                    errorSelectedItemID = errorsDisplayForm.SelectedItemID;
+                    displayedDatePicker.Value = errorsDisplayForm.SelectedDate.Value;
+                }
+            }
+        }
+
+        private void PointToErroneousEvent()
+        {
+            logListView.Select();
+            logListView.SelectedItems.Clear();
+
+            if (errorSelectedItemID.HasValue)
+                foreach (ListViewItem item in logListView.Items)
+                {
+                    if ((int)item.Tag == errorSelectedItemID.Value)
+                    {
+                        item.Selected = true;
+                        break;
+                    }
+                }
+            errorSelectedItemID = null;
         }
     }
 }

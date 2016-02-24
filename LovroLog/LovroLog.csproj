@@ -66,6 +66,12 @@
     <Compile Include="Database\IDataAccess.cs" />
     <Compile Include="Enums\LovroDiaperStatus.cs" />
     <Compile Include="Enums\LovroEventType.cs" />
+    <Compile Include="ErroneousEventsListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ErroneousEventsListForm.Designer.cs">
+      <DependentUpon>ErroneousEventsListForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="LovroBaseEventControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -95,8 +101,17 @@
     <Compile Include="ShowWarningForm.Designer.cs">
       <DependentUpon>ShowWarningForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SleepChartForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SleepChartForm.Designer.cs">
+      <DependentUpon>SleepChartForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AskForDetailsForm.resx">
       <DependentUpon>AskForDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ErroneousEventsListForm.resx">
+      <DependentUpon>ErroneousEventsListForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LovroBaseEventControl.resx">
       <DependentUpon>LovroBaseEventControl.cs</DependentUpon>
@@ -119,6 +134,9 @@
     </Compile>
     <EmbeddedResource Include="ShowWarningForm.resx">
       <DependentUpon>ShowWarningForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SleepChartForm.resx">
+      <DependentUpon>SleepChartForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
