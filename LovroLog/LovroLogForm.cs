@@ -532,7 +532,6 @@ namespace LovroLog
         private void displayedDatePicker_ValueChanged(object sender, EventArgs e)
         {
             ForceRefresh();
-            //RefreshLogViewDelegateInstance();
         }
 
         private void filterByTypeComboBox_SelectedValueChanged(object sender, EventArgs e)

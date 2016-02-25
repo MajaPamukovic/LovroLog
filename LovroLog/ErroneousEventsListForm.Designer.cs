@@ -47,7 +47,7 @@
             this.ClientSize = new System.Drawing.Size(284, 262);
             this.Controls.Add(this.erroneousEventsListView);
             this.Name = "ErroneousEventsListForm";
-            this.Text = "ErroneousEventsListForm";
+            this.Text = "Greške u podacima";
             this.Load += new System.EventHandler(this.ErroneousEventsListForm_Load);
             this.ResumeLayout(false);
 
