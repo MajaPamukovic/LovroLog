@@ -22,21 +22,12 @@ namespace LovroLog
     {
         #region Private fields
 
-        #region Default settings values
-        private const int defaultWarnDiaperUnchangedAfterHrs = 3;
-        private const int defaultWarnHasNotBathedAfterDays = 4;
-        #endregion
-
-        private int warnDiaperUnchangedAfterHrs;
-        private int warnHasNotBathedAfterDays;
-        private string connectionString = "";
         private bool logDisplayed;
         private DateTime lastDataUpdate;
         private DateTime lastRedraw;
         private System.Media.SoundPlayer player;
         private bool warningDisplayed = false;
         private DateTime lastWarningConditionSetRelatedToDiaperChangeAt;
-        private bool useXMLDatabase = false; // TODO move to app.config
         private Dictionary<int, DateTime> erroneousEvents;
         private int? errorSelectedItemID;
         
@@ -52,14 +43,6 @@ namespace LovroLog
         {
             InitializeComponent();
 
-            if (!int.TryParse(ConfigurationManager.AppSettings.Get("AllowedHrsWithoutDiaperChange"), out warnDiaperUnchangedAfterHrs))
-                warnDiaperUnchangedAfterHrs = defaultWarnDiaperUnchangedAfterHrs;
-
-            if (!int.TryParse(ConfigurationManager.AppSettings.Get("AllowedHrsWithoutDiaperChange"), out warnHasNotBathedAfterDays))
-                warnHasNotBathedAfterDays = defaultWarnHasNotBathedAfterDays;
-
-            connectionString = ConfigurationManager.AppSettings.Get("DatabaseConnectionString");
-            
             logListView.View = View.Details;
             logListView.GridLines = false;
             logListView.Scrollable = true;
@@ -84,12 +67,12 @@ namespace LovroLog
 
         private double GetDiaperChangeWarningLimitInMinutes()
         {
-            return warnDiaperUnchangedAfterHrs * 60;
+            return LovroAppSettings.Instance.AllowedHrsWithoutDiaperChange * 60;
         }
 
         private int GetBathWarningLimitInMinutes()
         {
-            return warnHasNotBathedAfterDays * 24 * 60;
+            return LovroAppSettings.Instance.AllowedDaysWithoutBath * 24 * 60;
         }
 
         private void ShitButton_Click(object sender, EventArgs e)
@@ -144,7 +127,7 @@ namespace LovroLog
                 return;
             }
 
-            using (var dataAccess = new DataAccessWrapper(connectionString, useXMLDatabase))
+            using (var dataAccess = new DataAccessWrapper(LovroAppSettings.Instance.DatabaseConnectionString, LovroAppSettings.Instance.UseXMLDatabase))
             {
                 dataAccess.AddBaseEvent(lovroEvent);
             }
@@ -311,7 +294,7 @@ namespace LovroLog
 
         private void RefreshLines(object state)
         {
-            using (var dataAccess = new DataAccessWrapper(connectionString, useXMLDatabase))
+            using (var dataAccess = new DataAccessWrapper(LovroAppSettings.Instance.DatabaseConnectionString, LovroAppSettings.Instance.UseXMLDatabase))
             {
                 DatabaseSummary summary = dataAccess.GetSummary();
                 if (summary != null)
@@ -331,7 +314,7 @@ namespace LovroLog
                 {
                     logListView.Items.Clear();
 
-                    using (var dataAccess = new DataAccessWrapper(connectionString, useXMLDatabase))
+                    using (var dataAccess = new DataAccessWrapper(LovroAppSettings.Instance.DatabaseConnectionString, LovroAppSettings.Instance.UseXMLDatabase))
                     {
                         LovroEventType typeFilter = LovroEventType.Default;
                         if (!Enum.TryParse(((KeyValuePair<string, string>)filterByTypeComboBox.SelectedItem).Key, out typeFilter))
@@ -426,7 +409,7 @@ namespace LovroLog
             }
             else
             {
-                using (var context = new LovroContext(connectionString))
+                using (var context = new LovroContext(LovroAppSettings.Instance.DatabaseConnectionString))
                 {
                     TimeSpan timeExpired;
 
@@ -465,16 +448,20 @@ namespace LovroLog
 
         private void CheckSoundWarning(object state)
         {
-            using (var context = new LovroContext(connectionString))
+            using (var context = new LovroContext(LovroAppSettings.Instance.DatabaseConnectionString))
             {
                 LovroDiaperChangedEvent lastDiaperChangedEvent = context.DiaperChangedEvents.OrderByDescending(item => item.Time).FirstOrDefault();
+                DateTime now = DateTime.Now;
 
-                if (lastDiaperChangedEvent != null && DateTime.Now > lastDiaperChangedEvent.Time.AddMinutes(GetDiaperChangeWarningLimitInMinutes()))
+                if (lastDiaperChangedEvent != null && now > lastDiaperChangedEvent.Time.AddMinutes(GetDiaperChangeWarningLimitInMinutes()))
                 {
                     if (lastWarningConditionSetRelatedToDiaperChangeAt < lastDiaperChangedEvent.Time)
                     {
                         player = new System.Media.SoundPlayer(@"c:\windows\media\Windows Battery Critical.wav");
-                        player.PlayLooping();
+
+                        if (!SilentModeCheckBox.Checked && now.Hour > LovroAppSettings.Instance.SilentAlarmBefore && now.Hour < LovroAppSettings.Instance.SilentAlarmAfter)
+                            player.PlayLooping();
+                        
                         lastWarningConditionSetRelatedToDiaperChangeAt = lastDiaperChangedEvent.Time;
 
                         if (!warningDisplayed)
@@ -562,7 +549,7 @@ namespace LovroLog
             if (MessageBox.Show(string.Concat("Sigurno želiš obrisati odabrane unose? (", logListView.SelectedItems.Count, " komad(a))"), "Upozorenje", MessageBoxButtons.OKCancel) != DialogResult.OK)
                 return;
 
-            using (var context = new LovroContext(connectionString))
+            using (var context = new LovroContext(LovroAppSettings.Instance.DatabaseConnectionString))
             {
                 var toBeDeletedIDs = logListView.SelectedItems.Cast<ListViewItem>().Select(item => (int)item.Tag);
                 var toBeDeletedItems = context.BaseEvents.Where(item => toBeDeletedIDs.Contains(item.ID));
@@ -590,7 +577,7 @@ namespace LovroLog
 
         private void EditEvent(int eventID)
         {
-            using (var context = new LovroContext(connectionString))
+            using (var context = new LovroContext(LovroAppSettings.Instance.DatabaseConnectionString))
             {
                 LovroBaseEvent eventInEditing = context.BaseEvents.FirstOrDefault(item => item.ID == eventID);
 
@@ -687,7 +674,7 @@ namespace LovroLog
 
         private void viewSleepChartButton_Click(object sender, EventArgs e)
         {
-            using (var form = new SleepChartForm(connectionString, useXMLDatabase))
+            using (var form = new SleepChartForm(LovroAppSettings.Instance.DatabaseConnectionString, LovroAppSettings.Instance.UseXMLDatabase))
             {
                 var result = form.ShowDialog();
                 if (form.SelectedDate.HasValue)
@@ -698,8 +685,8 @@ namespace LovroLog
         private void AnalyzeDataButton_Click(object sender, EventArgs e)
         {
             erroneousEvents = new Dictionary<int, DateTime>();
-            
-            using (var dataAccessWrapper = new DataAccessWrapper(connectionString, useXMLDatabase))
+
+            using (var dataAccessWrapper = new DataAccessWrapper(LovroAppSettings.Instance.DatabaseConnectionString, LovroAppSettings.Instance.UseXMLDatabase))
             {
                 List<LovroBaseEvent> napEvents = dataAccessWrapper.GetBaseEvents().Where(item => item.Type == LovroEventType.FellAsleep || item.Type == LovroEventType.WokeUp).OrderBy(item => item.Time).ToList();
 

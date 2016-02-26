@@ -50,6 +50,7 @@
             this.frogALogLabel = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.viewSleepChartButton = new System.Windows.Forms.Button();
+            this.AnalyzeDataButton = new System.Windows.Forms.Button();
             this.otherEventButton = new System.Windows.Forms.Button();
             this.toggleLogPBoxBtn = new System.Windows.Forms.PictureBox();
             this.stopwatchSleepPictureBox = new System.Windows.Forms.PictureBox();
@@ -66,7 +67,7 @@
             this.deleteEventButton = new System.Windows.Forms.Button();
             this.logoPictureBox = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.AnalyzeDataButton = new System.Windows.Forms.Button();
+            this.SilentModeCheckBox = new System.Windows.Forms.CheckBox();
             this.filterByTypeGroupBox.SuspendLayout();
             this.dateGroupBox.SuspendLayout();
             this.rightSidePanel.SuspendLayout();
@@ -286,6 +287,16 @@
             this.viewSleepChartButton.UseVisualStyleBackColor = true;
             this.viewSleepChartButton.Click += new System.EventHandler(this.viewSleepChartButton_Click);
             // 
+            // AnalyzeDataButton
+            // 
+            this.AnalyzeDataButton.Location = new System.Drawing.Point(64, 1);
+            this.AnalyzeDataButton.Name = "AnalyzeDataButton";
+            this.AnalyzeDataButton.Size = new System.Drawing.Size(62, 37);
+            this.AnalyzeDataButton.TabIndex = 33;
+            this.AnalyzeDataButton.Text = "Provjeri greške";
+            this.AnalyzeDataButton.UseVisualStyleBackColor = true;
+            this.AnalyzeDataButton.Click += new System.EventHandler(this.AnalyzeDataButton_Click);
+            // 
             // otherEventButton
             // 
             this.otherEventButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
@@ -496,15 +507,15 @@
             this.pictureBox2.TabIndex = 29;
             this.pictureBox2.TabStop = false;
             // 
-            // AnalyzeDataButton
+            // SilentModeCheckBox
             // 
-            this.AnalyzeDataButton.Location = new System.Drawing.Point(68, 1);
-            this.AnalyzeDataButton.Name = "AnalyzeDataButton";
-            this.AnalyzeDataButton.Size = new System.Drawing.Size(62, 37);
-            this.AnalyzeDataButton.TabIndex = 33;
-            this.AnalyzeDataButton.Text = "Provjeri greške";
-            this.AnalyzeDataButton.UseVisualStyleBackColor = true;
-            this.AnalyzeDataButton.Click += new System.EventHandler(this.AnalyzeDataButton_Click);
+            this.SilentModeCheckBox.AutoSize = true;
+            this.SilentModeCheckBox.Location = new System.Drawing.Point(2, 45);
+            this.SilentModeCheckBox.Name = "SilentModeCheckBox";
+            this.SilentModeCheckBox.Size = new System.Drawing.Size(90, 17);
+            this.SilentModeCheckBox.TabIndex = 34;
+            this.SilentModeCheckBox.Text = "Nečujni alarm";
+            this.SilentModeCheckBox.UseVisualStyleBackColor = true;
             // 
             // LovroLogForm
             // 
@@ -512,6 +523,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(183)))), ((int)(((byte)(235)))), ((int)(((byte)(206)))));
             this.ClientSize = new System.Drawing.Size(539, 582);
+            this.Controls.Add(this.SilentModeCheckBox);
             this.Controls.Add(this.AnalyzeDataButton);
             this.Controls.Add(this.viewSleepChartButton);
             this.Controls.Add(this.otherEventButton);
@@ -594,6 +606,7 @@
         private System.Windows.Forms.Button otherEventButton;
         private System.Windows.Forms.Button viewSleepChartButton;
         private System.Windows.Forms.Button AnalyzeDataButton;
+        private System.Windows.Forms.CheckBox SilentModeCheckBox;
     }
 }
 
