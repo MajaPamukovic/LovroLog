@@ -735,5 +735,13 @@ namespace LovroLog
                 }
             errorSelectedItemID = null;
         }
+
+        private void LovroLogForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            config.AppSettings.Settings["SilentAlarmAlways"].Value = SilentModeCheckBox.Checked.ToString();
+            config.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("appSettings");
+        }
     }
 }
