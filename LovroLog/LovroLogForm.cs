@@ -759,5 +759,10 @@ namespace LovroLog
             else
                 (sender as Button).Image = Resources.ResourceManager.GetObject("sound-20") as Image;
         }
+
+        private void goToTodayButton_Click(object sender, EventArgs e)
+        {
+            displayedDatePicker.Value = DateTime.Now;
+        }
     }
 }

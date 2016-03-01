@@ -69,6 +69,7 @@
             this.deleteEventButton = new System.Windows.Forms.Button();
             this.logoPictureBox = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.goToTodayButton = new System.Windows.Forms.Button();
             this.filterByTypeGroupBox.SuspendLayout();
             this.dateGroupBox.SuspendLayout();
             this.rightSidePanel.SuspendLayout();
@@ -169,12 +170,13 @@
             // 
             // dateGroupBox
             // 
+            this.dateGroupBox.Controls.Add(this.goToTodayButton);
             this.dateGroupBox.Controls.Add(this.displayedDatePicker);
             this.dateGroupBox.Controls.Add(this.goBackTimeButton);
             this.dateGroupBox.Controls.Add(this.goForwardTimeButton);
             this.dateGroupBox.Location = new System.Drawing.Point(2, 33);
             this.dateGroupBox.Name = "dateGroupBox";
-            this.dateGroupBox.Size = new System.Drawing.Size(196, 56);
+            this.dateGroupBox.Size = new System.Drawing.Size(217, 56);
             this.dateGroupBox.TabIndex = 16;
             this.dateGroupBox.TabStop = false;
             this.dateGroupBox.Text = "Datum";
@@ -532,12 +534,22 @@
             this.pictureBox2.TabIndex = 29;
             this.pictureBox2.TabStop = false;
             // 
+            // goToTodayButton
+            // 
+            this.goToTodayButton.Location = new System.Drawing.Point(181, 20);
+            this.goToTodayButton.Name = "goToTodayButton";
+            this.goToTodayButton.Size = new System.Drawing.Size(27, 23);
+            this.goToTodayButton.TabIndex = 15;
+            this.goToTodayButton.Text = ">>";
+            this.goToTodayButton.UseVisualStyleBackColor = true;
+            this.goToTodayButton.Click += new System.EventHandler(this.goToTodayButton_Click);
+            // 
             // LovroLogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(183)))), ((int)(((byte)(235)))), ((int)(((byte)(206)))));
-            this.ClientSize = new System.Drawing.Size(539, 582);
+            this.ClientSize = new System.Drawing.Size(1090, 582);
             this.Controls.Add(this.ToggleSoundButton);
             this.Controls.Add(this.SilentModeCheckBox);
             this.Controls.Add(this.AnalyzeDataButton);
@@ -625,6 +637,7 @@
         private System.Windows.Forms.Button AnalyzeDataButton;
         private System.Windows.Forms.CheckBox SilentModeCheckBox;
         private System.Windows.Forms.Button ToggleSoundButton;
+        private System.Windows.Forms.Button goToTodayButton;
     }
 }
 
