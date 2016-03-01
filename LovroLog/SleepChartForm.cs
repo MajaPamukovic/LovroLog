@@ -121,7 +121,7 @@ namespace LovroLog
                 int totalHeight = 0;
 
                 Rectangle dayBackgroundRectangle;
-                Pen dayBackgroundPen = new Pen(Color.DarkGray, 5); 
+                Pen dayBackgroundPen = new Pen(Color.LightGray, 5); 
 
                 for (int i = 0; i < totalDays; i++)
                 {
@@ -205,7 +205,7 @@ namespace LovroLog
                         throw new InvalidOperationException("Wtf man!");
 
                     Rectangle napRect;
-                    Pen napPen = new Pen(Color.Green, 5);
+                    Pen napPen = new Pen(Color.CornflowerBlue, 5);
                         
                     for (int j = 0; j < napStartsOnDate.Count; j++)
                     {
