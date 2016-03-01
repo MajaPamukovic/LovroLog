@@ -15,11 +15,18 @@ namespace LovroLog
 {
     public partial class SleepChartForm : Form
     {
+        private const int _defaultNumberOfDays = 7;
+        private const int _yOffset = 40;
+        private const int _yBottomPadding = 70;
+        private const int _yBigOffset = 100;
+        private const int _xOffset = 150;
+        private const int _rowHeight = 30;
+        private const int _hoursInDay = 24;
+        private const int _hourLabelFontSize = 8;
+        private const int _dateLabelFontSize = 10;
+
         private string connectionString;
         private bool useXMLDatabase;
-        private const int defaultNumberOfDays = 7;
-        private const int yOffset = 40;
-        private const int xOffset = 150;
 
         public SleepChartForm()
         {
@@ -46,8 +53,8 @@ namespace LovroLog
                 }
                 catch
                 {
-                    numberOfDaysSpinButton.Value = defaultNumberOfDays;
-                    return defaultNumberOfDays;
+                    numberOfDaysSpinButton.Value = _defaultNumberOfDays;
+                    return _defaultNumberOfDays;
                 }
             } 
         }
@@ -69,7 +76,7 @@ namespace LovroLog
             {
                 using (var graphics = this.CreateGraphics())
                 {
-                    graphics.Clear(Color.White);
+                    graphics.Clear(this.BackColor);
                 }
 
                 List<LovroBaseEvent> eventsList = dataAccess.GetBaseEvents()
@@ -110,11 +117,16 @@ namespace LovroLog
         {
             using (var graphics = this.CreateGraphics())
             {
+                int totalHeight = 0;
+
+                Rectangle dayBackgroundRectangle;
+                Pen dayBackgroundPen = new Pen(Color.DarkGray, 5); 
+
                 for (int i = 0; i < totalDays; i++)
                 {
                     try
                     {
-                        int dayWidth = this.Size.Width - xOffset;
+                        int dayWidth = this.Size.Width - _xOffset;
                         int dayHeight = (this.Size.Height / totalDays) / 2;
 
                         #region Drawing time grid
@@ -122,35 +134,44 @@ namespace LovroLog
                         Pen timeGridPen = new Pen(Color.Black, 1);
                         Rectangle timeGridRectangle;
 
-                        for (double j = 0; j <= 24; j += 2)
+                        for (double j = 0; j <= _hoursInDay; j += 2)
                         {
-                            timeGridRectangle = new Rectangle(100 + (int)((j / 24) * dayWidth), yOffset, 1, this.Size.Height);
-                            graphics.DrawLine(timeGridPen, timeGridRectangle.Location, new Point(timeGridRectangle.X, timeGridRectangle.Y + timeGridRectangle.Height)); //timeGridRectangle.Location.Offset(timeGridRectangle.Width, 0));
+                            timeGridRectangle = new Rectangle(_yBigOffset + (int)((j / _hoursInDay) * dayWidth), _yOffset, 1, _rowHeight * totalDays);
+                            graphics.DrawLine(timeGridPen, timeGridRectangle.Location, new Point(timeGridRectangle.X, timeGridRectangle.Y + timeGridRectangle.Height));
                         }
 
                         #endregion
 
-                        Font hourFont = new Font(FontFamily.GenericMonospace, 8);
-                        for (int j = 0; j <= 24; j += 2)
+                        #region Drawing hour labels
+
+                        Font hourFont = new Font(FontFamily.GenericMonospace, _hourLabelFontSize);
+                        for (int j = 0; j <= _hoursInDay; j += 2)
                         {
-                            graphics.DrawString(j.ToString().PadLeft(2, '0'), hourFont, Brushes.Black, new PointF(100 + (int)(dayWidth * ((j + 0.0) / 24)), yOffset + 5));
+                            graphics.DrawString(j.ToString().PadLeft(2, '0'), hourFont, Brushes.Black, new PointF(_yBigOffset + (int)(dayWidth * (((double)j) / _hoursInDay)), _yOffset + 5));
                         }
-
-                        #region Drawing basic/day rectangle w/date label
-
-                        graphics.DrawString(date.AddDays(i).ToShortDateString(), new Font(FontFamily.GenericMonospace, 10), Brushes.Black, new PointF(5, i * 30 + 5 + 10 + yOffset));
-                        Rectangle rectangle = new Rectangle(100, i * 30 + 10 + 10 + yOffset, dayWidth, 5); // !!!
-                        Pen basicPen = new Pen(Color.DarkGray, 5);
-                        graphics.DrawRectangle(basicPen, rectangle);
 
                         #endregion
 
+                        #region Drawing day "gray" rectangles w/date labels
+
+                        graphics.DrawString(date.AddDays(i).ToShortDateString(), new Font(FontFamily.GenericMonospace, _dateLabelFontSize), Brushes.Black, new PointF(5, i * _rowHeight + 5 + 10 + _yOffset));
+                        dayBackgroundRectangle = new Rectangle(_yBigOffset, i * _rowHeight + 10 + 10 + _yOffset, dayWidth, 5); // !!!
+                        graphics.DrawRectangle(dayBackgroundPen, dayBackgroundRectangle);
+
+                        #endregion
+
+                        totalHeight = dayBackgroundRectangle.Y + dayBackgroundRectangle.Height;
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("Samo da vidim");
+                        Console.WriteLine("Samo da vidim: {0}", ex.Message);
                     }
                 }
+
+                totalHeight += _yBottomPadding;
+                this.Height = totalHeight;
+                this.MinimumSize = new Size(this.MinimumSize.Width, totalHeight);
+                this.MaximumSize = new Size(int.MaxValue, totalHeight);
             }
         }
 
@@ -160,7 +181,7 @@ namespace LovroLog
             {
                 try
                 {
-                    int dayWidth = this.Size.Width - xOffset;
+                    int dayWidth = this.Size.Width - _xOffset;
                     int dayHeight = (this.Size.Height / totalDays) / 2;
 
                     #region Drawing naps
@@ -169,33 +190,35 @@ namespace LovroLog
 
                     if (napStartsOnDate.FirstOrDefault() > napEndsOnDate.FirstOrDefault())
                     {
-                        napStartsOnDate.Add(new DateTime(date.Year, date.Month, date.Day));
+                        napStartsOnDate.Add(date.Date); // midnight of current day
                         napStartsOnDate.Sort();
                     }
 
                     if (napEndsOnDate.LastOrDefault() < napStartsOnDate.LastOrDefault())
                     {
-                        napEndsOnDate.Add(date.AddDays(1));
+                        napEndsOnDate.Add(date.Date.AddDays(1)); // midnight of next day
                         napEndsOnDate.Sort();
                     }
                     
                     if (napStartsOnDate.Count != napEndsOnDate.Count)
                         throw new InvalidOperationException("Wtf man!");
 
+                    Rectangle napRect;
+                    Pen napPen = new Pen(Color.Green, 5);
+                        
                     for (int j = 0; j < napStartsOnDate.Count; j++)
                     {
-                        double ratioOfNapInDay = (napEndsOnDate[j] - napStartsOnDate[j]).TotalHours / 24;
-                        double ratioOfDayElapsedBeforeNap = (napStartsOnDate[j] - date).TotalHours / 24;
+                        double ratioOfNapInDay = (napEndsOnDate[j] - napStartsOnDate[j]).TotalHours / _hoursInDay;
+                        double ratioOfDayElapsedBeforeNap = (napStartsOnDate[j] - date).TotalHours / _hoursInDay;
 
-                        Rectangle napRect = new Rectangle(Convert.ToInt32(dayWidth * ratioOfDayElapsedBeforeNap) + 100, i * 30 + 20 + yOffset, Convert.ToInt32(dayWidth * ratioOfNapInDay), 5); // !!!
-                        Pen napPen = new Pen(Color.Green, 5);
+                        napRect = new Rectangle(Convert.ToInt32(dayWidth * ratioOfDayElapsedBeforeNap) + _yBigOffset, i * _rowHeight + 20 + _yOffset, Convert.ToInt32(dayWidth * ratioOfNapInDay), 5); // !!!
                         graphics.DrawRectangle(napPen, napRect);
                     }
                     #endregion
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Samo da vidim");
+                    Console.WriteLine("Samo da vidim: {0}", ex.Message);
                 }
             }
         }
