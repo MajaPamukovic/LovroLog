@@ -17,8 +17,9 @@ namespace LovroLog
     {
         private string connectionString;
         private bool useXMLDatabase;
-        private const int numberOfDays = 7; // jednostavnosti radi; TODO konfigurabilnost!!!
+        private const int defaultNumberOfDays = 7;
         private const int yOffset = 40;
+        private const int xOffset = 150;
 
         public SleepChartForm()
         {
@@ -34,13 +35,29 @@ namespace LovroLog
         }
 
         public DateTime StartDateSelected { get { return StartDatePicker.Value.Date; } }
+
+        private int NumberOfDays 
+        { 
+            get 
+            {
+                try
+                {
+                    return (int)numberOfDaysSpinButton.Value;
+                }
+                catch
+                {
+                    numberOfDaysSpinButton.Value = defaultNumberOfDays;
+                    return defaultNumberOfDays;
+                }
+            } 
+        }
         
         //TODO: set date property on canvas click!!!
         public DateTime? GoToDate { get; set; }
 
         private void SleepChartForm_Load(object sender, EventArgs e)
         {
-            StartDatePicker.Value = DateTime.Now.Date.AddDays(-1 * numberOfDays);
+            StartDatePicker.Value = DateTime.Now.Date.AddDays(-1 * NumberOfDays);
         }
 
         private void DrawChart()
@@ -58,7 +75,7 @@ namespace LovroLog
                 List<LovroBaseEvent> eventsList = dataAccess.GetBaseEvents()
                     .Where(item => 
                         (item.Type == LovroEventType.FellAsleep || item.Type == LovroEventType.WokeUp) &&
-                        (item.Time.Date >= StartDateSelected && item.Time.Date <= StartDateSelected.AddDays(numberOfDays)))
+                        (item.Time.Date >= StartDateSelected && item.Time.Date <= StartDateSelected.AddDays(NumberOfDays)))
                     .OrderByDescending(item => item.Time)
                     .OrderBy(item => item.Time)
                     .ToList();
@@ -81,14 +98,10 @@ namespace LovroLog
                         napEndTimes.Add(eventsList[i].Time);
                 }
 
-                DateTime startDate = napStartTimes.FirstOrDefault().Date;
-                DateTime endDate = napEndTimes.LastOrDefault().Date;
-                int daysElapsed = (int)(endDate - startDate).TotalDays;
-
-                DrawBase(daysElapsed, startDate, napStartTimes, napEndTimes);
-                for (int i = 0; i < daysElapsed; i++)
+                DrawBase(NumberOfDays, StartDateSelected, napStartTimes, napEndTimes);
+                for (int i = 0; i < NumberOfDays; i++)
                 {
-                    DrawDay(i, daysElapsed, startDate.AddDays(i), napStartTimes, napEndTimes);
+                    DrawDay(i, NumberOfDays, StartDateSelected.AddDays(i), napStartTimes, napEndTimes);
                 }
             }
         }
@@ -101,7 +114,7 @@ namespace LovroLog
                 {
                     try
                     {
-                        int dayWidth = this.Size.Width - 150;
+                        int dayWidth = this.Size.Width - xOffset;
                         int dayHeight = (this.Size.Height / totalDays) / 2;
 
                         #region Drawing time grid
@@ -147,7 +160,7 @@ namespace LovroLog
             {
                 try
                 {
-                    int dayWidth = this.Size.Width - 150;
+                    int dayWidth = this.Size.Width - xOffset;
                     int dayHeight = (this.Size.Height / totalDays) / 2;
 
                     #region Drawing naps
@@ -199,12 +212,17 @@ namespace LovroLog
 
         private void goBackwardButton_Click(object sender, EventArgs e)
         {
-            StartDatePicker.Value = StartDateSelected.AddDays(-1 * numberOfDays);
+            StartDatePicker.Value = StartDateSelected.AddDays(-1 * NumberOfDays);
         }
 
         private void goForwardButton_Click(object sender, EventArgs e)
         {
-            StartDatePicker.Value = StartDateSelected.AddDays(numberOfDays);
+            StartDatePicker.Value = StartDateSelected.AddDays(NumberOfDays);
+        }
+
+        private void numberOfDaysSpinButton_ValueChanged(object sender, EventArgs e)
+        {
+            DrawChart();
         }
     }   
 }
