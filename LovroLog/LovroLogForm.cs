@@ -677,8 +677,8 @@ namespace LovroLog
             using (var form = new SleepChartForm(LovroAppSettings.Instance.DatabaseConnectionString, LovroAppSettings.Instance.UseXMLDatabase))
             {
                 var result = form.ShowDialog();
-                if (form.SelectedDate.HasValue)
-                    displayedDatePicker.Value = form.SelectedDate.Value;
+                if (form.GoToDate.HasValue)
+                    displayedDatePicker.Value = form.GoToDate.Value;
             }
         }
 
