@@ -107,6 +107,7 @@
             this.Text = "Grafički prikaz spavanja";
             this.Load += new System.EventHandler(this.SleepChartForm_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.SleepChartForm_Paint);
+            this.DoubleClick += new System.EventHandler(this.SleepChartForm_DoubleClick);
             ((System.ComponentModel.ISupportInitialize)(this.numberOfDaysSpinButton)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

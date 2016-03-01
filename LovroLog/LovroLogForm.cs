@@ -674,7 +674,7 @@ namespace LovroLog
 
         private void viewSleepChartButton_Click(object sender, EventArgs e)
         {
-            using (var form = new SleepChartForm(LovroAppSettings.Instance.DatabaseConnectionString, LovroAppSettings.Instance.UseXMLDatabase))
+            using (var form = new SleepChartForm(LovroAppSettings.Instance.DatabaseConnectionString, LovroAppSettings.Instance.UseXMLDatabase, displayedDatePicker.Value.Date))
             {
                 var result = form.ShowDialog();
                 if (form.GoToDate.HasValue)

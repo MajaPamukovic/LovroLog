@@ -18,7 +18,7 @@ namespace LovroLog
         private const int _defaultNumberOfDays = 7;
         private const int _yOffset = 40;
         private const int _yBottomPadding = 70;
-        private const int _yBigOffset = 100;
+        private const int _xBigOffset = 100;
         private const int _xOffset = 150;
         private const int _rowHeight = 30;
         private const int _hoursInDay = 24;
@@ -27,21 +27,25 @@ namespace LovroLog
 
         private string connectionString;
         private bool useXMLDatabase;
+        private DateTime originalStartDate;
 
         public SleepChartForm()
         {
             InitializeComponent();
         }
 
-        public SleepChartForm(string connectionString, bool useXMLDatabase)
+        public SleepChartForm(string connectionString, bool useXMLDatabase, DateTime originalStartDate)
             : this()
         {
             this.connectionString = connectionString;
             this.useXMLDatabase = useXMLDatabase;
+            this.originalStartDate = originalStartDate;
             this.GoToDate = null;
         }
 
         public DateTime StartDateSelected { get { return StartDatePicker.Value.Date; } }
+        
+        public DateTime? GoToDate { get; set; }
 
         private int NumberOfDays 
         { 
@@ -58,13 +62,10 @@ namespace LovroLog
                 }
             } 
         }
-        
-        //TODO: set date property on canvas click!!!
-        public DateTime? GoToDate { get; set; }
 
         private void SleepChartForm_Load(object sender, EventArgs e)
         {
-            StartDatePicker.Value = DateTime.Now.Date.AddDays(-1 * NumberOfDays);
+            StartDatePicker.Value = originalStartDate.AddDays(-1 * NumberOfDays + 1);
         }
 
         private void DrawChart()
@@ -136,7 +137,7 @@ namespace LovroLog
 
                         for (double j = 0; j <= _hoursInDay; j += 2)
                         {
-                            timeGridRectangle = new Rectangle(_yBigOffset + (int)((j / _hoursInDay) * dayWidth), _yOffset, 1, _rowHeight * totalDays);
+                            timeGridRectangle = new Rectangle(_xBigOffset + (int)((j / _hoursInDay) * dayWidth), _yOffset, 1, _rowHeight * totalDays);
                             graphics.DrawLine(timeGridPen, timeGridRectangle.Location, new Point(timeGridRectangle.X, timeGridRectangle.Y + timeGridRectangle.Height));
                         }
 
@@ -147,7 +148,7 @@ namespace LovroLog
                         Font hourFont = new Font(FontFamily.GenericMonospace, _hourLabelFontSize);
                         for (int j = 0; j <= _hoursInDay; j += 2)
                         {
-                            graphics.DrawString(j.ToString().PadLeft(2, '0'), hourFont, Brushes.Black, new PointF(_yBigOffset + (int)(dayWidth * (((double)j) / _hoursInDay)), _yOffset + 5));
+                            graphics.DrawString(j.ToString().PadLeft(2, '0'), hourFont, Brushes.Black, new PointF(_xBigOffset + (int)(dayWidth * (((double)j) / _hoursInDay)), _yOffset + 5));
                         }
 
                         #endregion
@@ -155,7 +156,7 @@ namespace LovroLog
                         #region Drawing day "gray" rectangles w/date labels
 
                         graphics.DrawString(date.AddDays(i).ToShortDateString(), new Font(FontFamily.GenericMonospace, _dateLabelFontSize), Brushes.Black, new PointF(5, i * _rowHeight + 5 + 10 + _yOffset));
-                        dayBackgroundRectangle = new Rectangle(_yBigOffset, i * _rowHeight + 10 + 10 + _yOffset, dayWidth, 5); // !!!
+                        dayBackgroundRectangle = new Rectangle(_xBigOffset, i * _rowHeight + 10 + 10 + _yOffset, dayWidth, 5); // !!!
                         graphics.DrawRectangle(dayBackgroundPen, dayBackgroundRectangle);
 
                         #endregion
@@ -211,7 +212,7 @@ namespace LovroLog
                         double ratioOfNapInDay = (napEndsOnDate[j] - napStartsOnDate[j]).TotalHours / _hoursInDay;
                         double ratioOfDayElapsedBeforeNap = (napStartsOnDate[j] - date).TotalHours / _hoursInDay;
 
-                        napRect = new Rectangle(Convert.ToInt32(dayWidth * ratioOfDayElapsedBeforeNap) + _yBigOffset, i * _rowHeight + 20 + _yOffset, Convert.ToInt32(dayWidth * ratioOfNapInDay), 5); // !!!
+                        napRect = new Rectangle(Convert.ToInt32(dayWidth * ratioOfDayElapsedBeforeNap) + _xBigOffset, i * _rowHeight + 20 + _yOffset, Convert.ToInt32(dayWidth * ratioOfNapInDay), 5); // !!!
                         graphics.DrawRectangle(napPen, napRect);
                     }
                     #endregion
@@ -246,6 +247,22 @@ namespace LovroLog
         private void numberOfDaysSpinButton_ValueChanged(object sender, EventArgs e)
         {
             DrawChart();
+        }
+
+        private void SleepChartForm_DoubleClick(object sender, EventArgs e)
+        {
+            try
+            {
+                GoToDate = StartDateSelected.AddDays((int)(((e as MouseEventArgs).Y - _yOffset) / _rowHeight));
+            }
+            catch
+            {
+                GoToDate = null;
+            }
+            finally
+            {
+                Close();
+            }
         }
     }   
 }
