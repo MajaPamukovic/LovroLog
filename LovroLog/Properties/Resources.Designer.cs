@@ -83,6 +83,36 @@ namespace LovroLog.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap chart_20 {
+            get {
+                object obj = ResourceManager.GetObject("chart-20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap chart_32 {
+            get {
+                object obj = ResourceManager.GetObject("chart-32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap chart_60 {
+            get {
+                object obj = ResourceManager.GetObject("chart-60", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap daisy_35 {
             get {
                 object obj = ResourceManager.GetObject("daisy-35", resourceCulture);
@@ -196,6 +226,16 @@ namespace LovroLog.Properties {
         internal static System.Drawing.Bitmap ellipsis_60px {
             get {
                 object obj = ResourceManager.GetObject("ellipsis-60px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap errorViewer_20 {
+            get {
+                object obj = ResourceManager.GetObject("errorViewer-20", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -396,6 +436,56 @@ namespace LovroLog.Properties {
         internal static System.Drawing.Bitmap sleep_transparent_60opx {
             get {
                 object obj = ResourceManager.GetObject("sleep_transparent_60opx", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sound_20 {
+            get {
+                object obj = ResourceManager.GetObject("sound-20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sound_32 {
+            get {
+                object obj = ResourceManager.GetObject("sound-32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sound_off_20 {
+            get {
+                object obj = ResourceManager.GetObject("sound-off-20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sound_off2_20 {
+            get {
+                object obj = ResourceManager.GetObject("sound-off2-20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sound_off2_201 {
+            get {
+                object obj = ResourceManager.GetObject("sound-off2-201", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

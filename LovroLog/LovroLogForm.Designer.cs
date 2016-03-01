@@ -46,19 +46,18 @@
             this.RefreshLogViewButton = new System.Windows.Forms.Button();
             this.filterByDateCheckBox = new System.Windows.Forms.CheckBox();
             this.rightSidePanel = new System.Windows.Forms.Panel();
-            this.editEventButton = new System.Windows.Forms.Button();
-            this.deleteEventButton = new System.Windows.Forms.Button();
             this.logListView = new System.Windows.Forms.ListView();
             this.frogALogLabel = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.SilentModeCheckBox = new System.Windows.Forms.CheckBox();
+            this.ToggleSoundButton = new System.Windows.Forms.Button();
+            this.AnalyzeDataButton = new System.Windows.Forms.Button();
+            this.viewSleepChartButton = new System.Windows.Forms.Button();
+            this.otherEventButton = new System.Windows.Forms.Button();
             this.toggleLogPBoxBtn = new System.Windows.Forms.PictureBox();
             this.stopwatchSleepPictureBox = new System.Windows.Forms.PictureBox();
             this.stopwatchFoodPictureBox = new System.Windows.Forms.PictureBox();
             this.stopwatchDiaperPictureBox = new System.Windows.Forms.PictureBox();
-            this.logoPictureBox = new System.Windows.Forms.PictureBox();
-            this.viewSleepChartButton = new System.Windows.Forms.Button();
-            this.AnalyzeDataButton = new System.Windows.Forms.Button();
-            this.otherEventButton = new System.Windows.Forms.Button();
             this.poopyDiaperChangedButton = new System.Windows.Forms.Button();
             this.bathedButton = new System.Windows.Forms.Button();
             this.wetDiaperChangedButton = new System.Windows.Forms.Button();
@@ -66,8 +65,10 @@
             this.fellAsleep = new System.Windows.Forms.Button();
             this.foodButton = new System.Windows.Forms.Button();
             this.shitButton = new System.Windows.Forms.Button();
+            this.editEventButton = new System.Windows.Forms.Button();
+            this.deleteEventButton = new System.Windows.Forms.Button();
+            this.logoPictureBox = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.SilentModeCheckBox = new System.Windows.Forms.CheckBox();
             this.filterByTypeGroupBox.SuspendLayout();
             this.dateGroupBox.SuspendLayout();
             this.rightSidePanel.SuspendLayout();
@@ -256,26 +257,6 @@
             this.rightSidePanel.Size = new System.Drawing.Size(548, 635);
             this.rightSidePanel.TabIndex = 26;
             // 
-            // editEventButton
-            // 
-            this.editEventButton.Image = global::LovroLog.Properties.Resources.edit_darker_20px;
-            this.editEventButton.Location = new System.Drawing.Point(503, 54);
-            this.editEventButton.Name = "editEventButton";
-            this.editEventButton.Size = new System.Drawing.Size(40, 36);
-            this.editEventButton.TabIndex = 20;
-            this.editEventButton.UseVisualStyleBackColor = true;
-            this.editEventButton.Click += new System.EventHandler(this.editEventButton_Click);
-            // 
-            // deleteEventButton
-            // 
-            this.deleteEventButton.Image = global::LovroLog.Properties.Resources.Delete_20px;
-            this.deleteEventButton.Location = new System.Drawing.Point(436, 53);
-            this.deleteEventButton.Name = "deleteEventButton";
-            this.deleteEventButton.Size = new System.Drawing.Size(40, 36);
-            this.deleteEventButton.TabIndex = 19;
-            this.deleteEventButton.UseVisualStyleBackColor = true;
-            this.deleteEventButton.Click += new System.EventHandler(this.deleteEventButton_Click);
-            // 
             // logListView
             // 
             this.logListView.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -296,6 +277,65 @@
             this.frogALogLabel.Size = new System.Drawing.Size(307, 74);
             this.frogALogLabel.TabIndex = 27;
             this.frogALogLabel.Text = "Frog-A-Log";
+            // 
+            // SilentModeCheckBox
+            // 
+            this.SilentModeCheckBox.AutoSize = true;
+            this.SilentModeCheckBox.Location = new System.Drawing.Point(428, 5);
+            this.SilentModeCheckBox.Name = "SilentModeCheckBox";
+            this.SilentModeCheckBox.Size = new System.Drawing.Size(90, 17);
+            this.SilentModeCheckBox.TabIndex = 34;
+            this.SilentModeCheckBox.Text = "Nečujni alarm";
+            this.SilentModeCheckBox.UseVisualStyleBackColor = true;
+            this.SilentModeCheckBox.Visible = false;
+            // 
+            // ToggleSoundButton
+            // 
+            this.ToggleSoundButton.Image = global::LovroLog.Properties.Resources.sound_off2_201;
+            this.ToggleSoundButton.Location = new System.Drawing.Point(84, 16);
+            this.ToggleSoundButton.Name = "ToggleSoundButton";
+            this.ToggleSoundButton.Size = new System.Drawing.Size(32, 32);
+            this.ToggleSoundButton.TabIndex = 35;
+            this.toolTip1.SetToolTip(this.ToggleSoundButton, "Uključi/isključi zvuk");
+            this.ToggleSoundButton.UseVisualStyleBackColor = true;
+            this.ToggleSoundButton.Click += new System.EventHandler(this.ToggleSoundButton_Click);
+            // 
+            // AnalyzeDataButton
+            // 
+            this.AnalyzeDataButton.Image = global::LovroLog.Properties.Resources.errorViewer_20;
+            this.AnalyzeDataButton.Location = new System.Drawing.Point(45, 16);
+            this.AnalyzeDataButton.Name = "AnalyzeDataButton";
+            this.AnalyzeDataButton.Size = new System.Drawing.Size(32, 32);
+            this.AnalyzeDataButton.TabIndex = 33;
+            this.toolTip1.SetToolTip(this.AnalyzeDataButton, "Provjeri greške");
+            this.AnalyzeDataButton.UseVisualStyleBackColor = true;
+            this.AnalyzeDataButton.Click += new System.EventHandler(this.AnalyzeDataButton_Click);
+            // 
+            // viewSleepChartButton
+            // 
+            this.viewSleepChartButton.Image = global::LovroLog.Properties.Resources.chart_20;
+            this.viewSleepChartButton.Location = new System.Drawing.Point(7, 16);
+            this.viewSleepChartButton.Name = "viewSleepChartButton";
+            this.viewSleepChartButton.Size = new System.Drawing.Size(32, 32);
+            this.viewSleepChartButton.TabIndex = 32;
+            this.toolTip1.SetToolTip(this.viewSleepChartButton, "Grafički prikaz spavanja");
+            this.viewSleepChartButton.UseVisualStyleBackColor = true;
+            this.viewSleepChartButton.Click += new System.EventHandler(this.viewSleepChartButton_Click);
+            // 
+            // otherEventButton
+            // 
+            this.otherEventButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.otherEventButton.Font = new System.Drawing.Font("Segoe Script", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.otherEventButton.Image = global::LovroLog.Properties.Resources.ellipsis_60px;
+            this.otherEventButton.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.otherEventButton.Location = new System.Drawing.Point(347, 281);
+            this.otherEventButton.Name = "otherEventButton";
+            this.otherEventButton.Size = new System.Drawing.Size(154, 102);
+            this.otherEventButton.TabIndex = 31;
+            this.otherEventButton.Text = "Razno...";
+            this.otherEventButton.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.otherEventButton.UseVisualStyleBackColor = false;
+            this.otherEventButton.Click += new System.EventHandler(this.otherEventButton_Click);
             // 
             // toggleLogPBoxBtn
             // 
@@ -345,52 +385,6 @@
             this.stopwatchDiaperPictureBox.TabIndex = 21;
             this.stopwatchDiaperPictureBox.TabStop = false;
             this.toolTip1.SetToolTip(this.stopwatchDiaperPictureBox, "Vrijeme proteklo od posljednje promjene pelena");
-            // 
-            // logoPictureBox
-            // 
-            this.logoPictureBox.Image = global::LovroLog.Properties.Resources.frog_icon;
-            this.logoPictureBox.Location = new System.Drawing.Point(334, 429);
-            this.logoPictureBox.Name = "logoPictureBox";
-            this.logoPictureBox.Size = new System.Drawing.Size(184, 180);
-            this.logoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.logoPictureBox.TabIndex = 28;
-            this.logoPictureBox.TabStop = false;
-            this.toolTip1.SetToolTip(this.logoPictureBox, "Bok, ja sam žaba!");
-            // 
-            // viewSleepChartButton
-            // 
-            this.viewSleepChartButton.Location = new System.Drawing.Point(2, 1);
-            this.viewSleepChartButton.Name = "viewSleepChartButton";
-            this.viewSleepChartButton.Size = new System.Drawing.Size(59, 37);
-            this.viewSleepChartButton.TabIndex = 32;
-            this.viewSleepChartButton.Text = "Graf spavanja";
-            this.viewSleepChartButton.UseVisualStyleBackColor = true;
-            this.viewSleepChartButton.Click += new System.EventHandler(this.viewSleepChartButton_Click);
-            // 
-            // AnalyzeDataButton
-            // 
-            this.AnalyzeDataButton.Location = new System.Drawing.Point(64, 1);
-            this.AnalyzeDataButton.Name = "AnalyzeDataButton";
-            this.AnalyzeDataButton.Size = new System.Drawing.Size(62, 37);
-            this.AnalyzeDataButton.TabIndex = 33;
-            this.AnalyzeDataButton.Text = "Provjeri greške";
-            this.AnalyzeDataButton.UseVisualStyleBackColor = true;
-            this.AnalyzeDataButton.Click += new System.EventHandler(this.AnalyzeDataButton_Click);
-            // 
-            // otherEventButton
-            // 
-            this.otherEventButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.otherEventButton.Font = new System.Drawing.Font("Segoe Script", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.otherEventButton.Image = global::LovroLog.Properties.Resources.ellipsis_60px;
-            this.otherEventButton.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.otherEventButton.Location = new System.Drawing.Point(347, 281);
-            this.otherEventButton.Name = "otherEventButton";
-            this.otherEventButton.Size = new System.Drawing.Size(154, 102);
-            this.otherEventButton.TabIndex = 31;
-            this.otherEventButton.Text = "Razno...";
-            this.otherEventButton.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.otherEventButton.UseVisualStyleBackColor = false;
-            this.otherEventButton.Click += new System.EventHandler(this.otherEventButton_Click);
             // 
             // poopyDiaperChangedButton
             // 
@@ -497,6 +491,37 @@
             this.shitButton.UseVisualStyleBackColor = false;
             this.shitButton.Click += new System.EventHandler(this.ShitButton_Click);
             // 
+            // editEventButton
+            // 
+            this.editEventButton.Image = global::LovroLog.Properties.Resources.edit_darker_20px;
+            this.editEventButton.Location = new System.Drawing.Point(503, 54);
+            this.editEventButton.Name = "editEventButton";
+            this.editEventButton.Size = new System.Drawing.Size(40, 36);
+            this.editEventButton.TabIndex = 20;
+            this.editEventButton.UseVisualStyleBackColor = true;
+            this.editEventButton.Click += new System.EventHandler(this.editEventButton_Click);
+            // 
+            // deleteEventButton
+            // 
+            this.deleteEventButton.Image = global::LovroLog.Properties.Resources.Delete_20px;
+            this.deleteEventButton.Location = new System.Drawing.Point(436, 53);
+            this.deleteEventButton.Name = "deleteEventButton";
+            this.deleteEventButton.Size = new System.Drawing.Size(40, 36);
+            this.deleteEventButton.TabIndex = 19;
+            this.deleteEventButton.UseVisualStyleBackColor = true;
+            this.deleteEventButton.Click += new System.EventHandler(this.deleteEventButton_Click);
+            // 
+            // logoPictureBox
+            // 
+            this.logoPictureBox.Image = global::LovroLog.Properties.Resources.frog_icon;
+            this.logoPictureBox.Location = new System.Drawing.Point(334, 429);
+            this.logoPictureBox.Name = "logoPictureBox";
+            this.logoPictureBox.Size = new System.Drawing.Size(184, 180);
+            this.logoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.logoPictureBox.TabIndex = 28;
+            this.logoPictureBox.TabStop = false;
+            this.toolTip1.SetToolTip(this.logoPictureBox, "Bok, ja sam žaba!");
+            // 
             // pictureBox2
             // 
             this.pictureBox2.BackgroundImage = global::LovroLog.Properties.Resources.pruga2;
@@ -507,22 +532,13 @@
             this.pictureBox2.TabIndex = 29;
             this.pictureBox2.TabStop = false;
             // 
-            // SilentModeCheckBox
-            // 
-            this.SilentModeCheckBox.AutoSize = true;
-            this.SilentModeCheckBox.Location = new System.Drawing.Point(2, 45);
-            this.SilentModeCheckBox.Name = "SilentModeCheckBox";
-            this.SilentModeCheckBox.Size = new System.Drawing.Size(90, 17);
-            this.SilentModeCheckBox.TabIndex = 34;
-            this.SilentModeCheckBox.Text = "Nečujni alarm";
-            this.SilentModeCheckBox.UseVisualStyleBackColor = true;
-            // 
             // LovroLogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(183)))), ((int)(((byte)(235)))), ((int)(((byte)(206)))));
             this.ClientSize = new System.Drawing.Size(539, 582);
+            this.Controls.Add(this.ToggleSoundButton);
             this.Controls.Add(this.SilentModeCheckBox);
             this.Controls.Add(this.AnalyzeDataButton);
             this.Controls.Add(this.viewSleepChartButton);
@@ -608,6 +624,7 @@
         private System.Windows.Forms.Button viewSleepChartButton;
         private System.Windows.Forms.Button AnalyzeDataButton;
         private System.Windows.Forms.CheckBox SilentModeCheckBox;
+        private System.Windows.Forms.Button ToggleSoundButton;
     }
 }
 

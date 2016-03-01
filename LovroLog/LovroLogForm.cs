@@ -167,7 +167,13 @@ namespace LovroLog
             filterByTypeComboBox.DisplayMember = "Value";
             filterByTypeComboBox.ValueMember = "Key";
 
-
+            if (LovroAppSettings.Instance.SilentAlarmAlways)
+            {
+                ToggleSoundButton.Image = Resources.ResourceManager.GetObject("sound-off2-20") as Image;
+                SilentModeCheckBox.Checked = true;
+            }
+            else
+                ToggleSoundButton.Image = Resources.ResourceManager.GetObject("sound-20") as Image;
         }
 
         private void ToggleLogButton_Click(object sender, EventArgs e)
@@ -742,6 +748,16 @@ namespace LovroLog
             config.AppSettings.Settings["SilentAlarmAlways"].Value = SilentModeCheckBox.Checked.ToString();
             config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("appSettings");
+        }
+
+        private void ToggleSoundButton_Click(object sender, EventArgs e)
+        {
+            SilentModeCheckBox.Checked = !SilentModeCheckBox.Checked;
+
+            if (SilentModeCheckBox.Checked)
+                (sender as Button).Image = Resources.ResourceManager.GetObject("sound-off2-20") as Image;
+            else
+                (sender as Button).Image = Resources.ResourceManager.GetObject("sound-20") as Image;
         }
     }
 }

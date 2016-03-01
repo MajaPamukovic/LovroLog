@@ -203,6 +203,10 @@
     <None Include="Resursi\wakeUp-transparent-60px.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resursi\sound-off2-20.png" />
+    <None Include="Resursi\sound-off-20.png" />
+    <None Include="Resursi\sound-20.png" />
+    <None Include="Resursi\sound-32.png" />
     <None Include="Resursi\plus3d-gray-35px.png" />
     <None Include="Resursi\plus3d-35px.png" />
     <None Include="Resursi\minus3d-gray-35px.png" />
@@ -214,6 +218,10 @@
     <None Include="Resursi\frog-bright-2.png" />
     <None Include="Resursi\frog-bright.png" />
     <None Include="Resursi\ellipsis-60px.png" />
+    <None Include="Resursi\chart-60.png" />
+    <None Include="Resursi\chart-32.png" />
+    <None Include="Resursi\chart-20.png" />
+    <None Include="Resursi\errorViewer-20.png" />
     <Content Include="Resursi\frog-icon-semitransparent.png" />
     <None Include="Resursi\edit-darker-20px.png" />
     <None Include="Resursi\edit-60px.png" />
