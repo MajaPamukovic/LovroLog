@@ -415,14 +415,14 @@ namespace LovroLog
             }
             else
             {
-                using (var context = new LovroContext(LovroAppSettings.Instance.DatabaseConnectionString))
+                using (var dataAccessWrapper = new DataAccessWrapper(LovroAppSettings.Instance.DatabaseConnectionString, LovroAppSettings.Instance.UseXMLDatabase))
                 {
                     TimeSpan timeExpired;
 
-                    LovroDiaperChangedEvent diaperChangedEvent = context.DiaperChangedEvents.OrderByDescending(item => item.Time).FirstOrDefault();
+                    LovroDiaperChangedEvent diaperChangedEvent = dataAccessWrapper.GetDiaperChangedEvents().OrderByDescending(item => item.Time).FirstOrDefault();
                     if (diaperChangedEvent != null)
                     {
-                        timeExpired = DateTime.Now - context.DiaperChangedEvents.OrderByDescending(item => item.Time).FirstOrDefault().Time;
+                        timeExpired = DateTime.Now - dataAccessWrapper.GetDiaperChangedEvents().OrderByDescending(item => item.Time).FirstOrDefault().Time;
                         stopwatchDiaperLabel.Text = timeExpired.ToString(@"hh\:mm\:ss");
                         if (timeExpired.TotalMinutes > GetDiaperChangeWarningLimitInMinutes())
                             stopwatchDiaperLabel.ForeColor = Color.Red;
@@ -430,8 +430,8 @@ namespace LovroLog
                             stopwatchDiaperLabel.ForeColor = Color.Black;
                     }
 
-                    DateTime lastWokeUp = context.BaseEvents.Where(item => item.Type == LovroEventType.WokeUp).OrderByDescending(item => item.Time).FirstOrDefault().Time;
-                    DateTime lastFellAsleep = context.BaseEvents.Where(item => item.Type == LovroEventType.FellAsleep).OrderByDescending(item => item.Time).FirstOrDefault().Time;
+                    DateTime lastWokeUp = dataAccessWrapper.GetBaseEvents().Where(item => item.Type == LovroEventType.WokeUp).OrderByDescending(item => item.Time).FirstOrDefault().Time;
+                    DateTime lastFellAsleep = dataAccessWrapper.GetBaseEvents().Where(item => item.Type == LovroEventType.FellAsleep).OrderByDescending(item => item.Time).FirstOrDefault().Time;
 
                     if (lastWokeUp > lastFellAsleep) //if not sleeping atm
                     {
@@ -441,7 +441,7 @@ namespace LovroLog
                     else
                         stopwatchSleepLabel.Text = "00:00:00";
 
-                    timeExpired = DateTime.Now - context.BaseEvents.Where(item => item.Type == LovroEventType.AteFood).OrderByDescending(item => item.Time).FirstOrDefault().Time;
+                    timeExpired = DateTime.Now - dataAccessWrapper.GetBaseEvents().Where(item => item.Type == LovroEventType.AteFood).OrderByDescending(item => item.Time).FirstOrDefault().Time;
                     stopwatchFoodLabel.Text = timeExpired.ToString(@"hh\:mm\:ss");
                 }
             }
@@ -454,9 +454,9 @@ namespace LovroLog
 
         private void CheckSoundWarning(object state)
         {
-            using (var context = new LovroContext(LovroAppSettings.Instance.DatabaseConnectionString))
+            using (var dataAccessWrapper = new DataAccessWrapper(LovroAppSettings.Instance.DatabaseConnectionString, LovroAppSettings.Instance.UseXMLDatabase))
             {
-                LovroDiaperChangedEvent lastDiaperChangedEvent = context.DiaperChangedEvents.OrderByDescending(item => item.Time).FirstOrDefault();
+                LovroDiaperChangedEvent lastDiaperChangedEvent = dataAccessWrapper.GetDiaperChangedEvents().OrderByDescending(item => item.Time).FirstOrDefault();
                 DateTime now = DateTime.Now;
 
                 if (lastDiaperChangedEvent != null && now > lastDiaperChangedEvent.Time.AddMinutes(GetDiaperChangeWarningLimitInMinutes()))
@@ -555,15 +555,13 @@ namespace LovroLog
             if (MessageBox.Show(string.Concat("Sigurno želiš obrisati odabrane unose? (", logListView.SelectedItems.Count, " komad(a))"), "Upozorenje", MessageBoxButtons.OKCancel) != DialogResult.OK)
                 return;
 
-            using (var context = new LovroContext(LovroAppSettings.Instance.DatabaseConnectionString))
+            using (var dataAccessWrapper = new DataAccessWrapper(LovroAppSettings.Instance.DatabaseConnectionString, LovroAppSettings.Instance.UseXMLDatabase))
             {
                 var toBeDeletedIDs = logListView.SelectedItems.Cast<ListViewItem>().Select(item => (int)item.Tag);
-                var toBeDeletedItems = context.BaseEvents.Where(item => toBeDeletedIDs.Contains(item.ID));
+                var toBeDeletedItems = dataAccessWrapper.GetBaseEvents().Where(item => toBeDeletedIDs.Contains(item.ID));
 
                 foreach (LovroBaseEvent lovroEvent in toBeDeletedItems)
-                    context.BaseEvents.Remove(lovroEvent);
-
-                context.SaveChanges();
+                    dataAccessWrapper.DeleteBaseEvent(lovroEvent.ID);
             }
         }
 
@@ -583,9 +581,9 @@ namespace LovroLog
 
         private void EditEvent(int eventID)
         {
-            using (var context = new LovroContext(LovroAppSettings.Instance.DatabaseConnectionString))
+            using (var dataAccessWrapper = new DataAccessWrapper(LovroAppSettings.Instance.DatabaseConnectionString, LovroAppSettings.Instance.UseXMLDatabase))
             {
-                LovroBaseEvent eventInEditing = context.BaseEvents.FirstOrDefault(item => item.ID == eventID);
+                LovroBaseEvent eventInEditing = dataAccessWrapper.GetBaseEvents().FirstOrDefault(item => item.ID == eventID);
 
                 if (eventInEditing == null)
                     throw new InvalidOperationException("Nepostojeći unos!");
@@ -594,7 +592,7 @@ namespace LovroLog
                 {
                     editForm.EventInEditing = eventInEditing;
                     if (editForm.ShowDialog() == DialogResult.OK) // eventInEditing properties will be changed in the dialog
-                        context.SaveChanges();
+                        dataAccessWrapper.EditBaseEvent(eventInEditing);
                 }
             }
         }

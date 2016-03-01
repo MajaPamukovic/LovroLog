@@ -66,7 +66,6 @@ namespace LovroLog.Database
             if (eventToDelete != null)
             {
                 databaseAccessor.BaseEvents.Remove(eventToDelete);
-                databaseAccessor.SaveChanges();
             }
         }
 
@@ -78,8 +77,6 @@ namespace LovroLog.Database
             if (newEvent != null)
             {
                 newEvent = databaseAccessor.BaseEvents.Add(newEvent);
-                databaseAccessor.SaveChanges();
-
                 return newEvent; // now with ID set automatically by the database
             }
             
@@ -97,8 +94,6 @@ namespace LovroLog.Database
                 if (savedEvent != null)
                     savedEvent.CopyProperties(editedEvent);
 
-                databaseAccessor.SaveChanges();
-
                 return savedEvent;
             }
 
@@ -108,7 +103,10 @@ namespace LovroLog.Database
         public void Dispose()
         {
             if (this.databaseAccessor != null)
+            {
+                databaseAccessor.SaveChanges();
                 this.databaseAccessor.Dispose();
+            }
         }
     }
 }
