@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SleepChartForm));
             this.StartDatePicker = new System.Windows.Forms.DateTimePicker();
             this.StartDatePickerLabel = new System.Windows.Forms.Label();
             this.goBackwardButton = new System.Windows.Forms.Button();
@@ -103,6 +104,7 @@
             this.Controls.Add(this.goBackwardButton);
             this.Controls.Add(this.StartDatePickerLabel);
             this.Controls.Add(this.StartDatePicker);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SleepChartForm";
             this.Text = "Grafički prikaz spavanja";
             this.Load += new System.EventHandler(this.SleepChartForm_Load);

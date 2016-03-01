@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LovroEventEditForm));
             this.lovroBaseEventControl1 = new LovroLog.LovroBaseEventControl();
             this.diaperStatusCheckBox = new System.Windows.Forms.CheckBox();
             this.CancelNoteBtn = new System.Windows.Forms.Button();
@@ -36,8 +37,10 @@
             // 
             // lovroBaseEventControl1
             // 
+            this.lovroBaseEventControl1.EnteredNote = "";
             this.lovroBaseEventControl1.Location = new System.Drawing.Point(12, 12);
             this.lovroBaseEventControl1.Name = "lovroBaseEventControl1";
+            this.lovroBaseEventControl1.SelectedDateTime = new System.DateTime(2016, 3, 1, 18, 0, 3, 363);
             this.lovroBaseEventControl1.Size = new System.Drawing.Size(264, 323);
             this.lovroBaseEventControl1.TabIndex = 0;
             // 
@@ -82,6 +85,7 @@
             this.Controls.Add(this.OkNoteBtn);
             this.Controls.Add(this.diaperStatusCheckBox);
             this.Controls.Add(this.lovroBaseEventControl1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "LovroEventEditForm";
             this.Text = "Uređivanje unosa";
             this.Load += new System.EventHandler(this.LovroEventEditForm_Load);
