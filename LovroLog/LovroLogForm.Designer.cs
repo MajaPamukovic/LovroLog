@@ -90,6 +90,7 @@
             this.askForDetailsCheckBox.TabIndex = 8;
             this.askForDetailsCheckBox.Text = "Uredi detalje (Ctrl+click)";
             this.askForDetailsCheckBox.UseVisualStyleBackColor = true;
+            this.askForDetailsCheckBox.Visible = false;
             // 
             // imageList1
             // 
@@ -549,7 +550,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(183)))), ((int)(((byte)(235)))), ((int)(((byte)(206)))));
-            this.ClientSize = new System.Drawing.Size(1090, 582);
+            this.ClientSize = new System.Drawing.Size(539, 582);
             this.Controls.Add(this.ToggleSoundButton);
             this.Controls.Add(this.SilentModeCheckBox);
             this.Controls.Add(this.AnalyzeDataButton);

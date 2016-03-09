@@ -15,61 +15,64 @@ namespace LovroLog
         private static int defaultSilentAlarmBefore = 8;
         private static int defaultSilentAlarmAfter = 20;
         private static bool defaultSilentAlarmAlways = false;
+         private static bool defaultUseXmlDatabase = false;
         #endregion
+
+        private int allowedHrsWithoutDiaperChange;
+        private int allowedDaysWithoutBath;
+        private int silentAlarmBefore;
+        private int silentAlarmAfter;
+        private bool silentAlarmAlways;
+        private string dataAccessDetails;
+        private bool useXMLDatabase;
+        
+        private static LovroAppSettings instance;
 
         static LovroAppSettings()
         {
-            Instance = new LovroAppSettings();
+            instance = new LovroAppSettings();
 
-            Instance.DatabaseConnectionString = ConfigurationManager.AppSettings.Get("DatabaseConnectionString");
-            Instance.XMLDatabaseFolder = ConfigurationManager.AppSettings.Get("XMLDatabaseFolder");
+            instance.dataAccessDetails = ConfigurationManager.AppSettings.Get("DataAccessDetails");
 
             int tempVal; // lošeee
             if (!int.TryParse(ConfigurationManager.AppSettings.Get("AllowedHrsWithoutDiaperChange"), out tempVal))
-                Instance.AllowedHrsWithoutDiaperChange = defaultWarnDiaperUnchangedAfterHrs;
+                instance.allowedHrsWithoutDiaperChange = defaultWarnDiaperUnchangedAfterHrs;
             else
-                Instance.AllowedHrsWithoutDiaperChange = tempVal;
+                instance.allowedHrsWithoutDiaperChange = tempVal;
 
             if (!int.TryParse(ConfigurationManager.AppSettings.Get("AllowedDaysWithoutBath"), out tempVal))
-                Instance.AllowedDaysWithoutBath = defaultWarnHasNotBathedAfterDays;
+                instance.allowedDaysWithoutBath = defaultWarnHasNotBathedAfterDays;
             else
-                Instance.AllowedDaysWithoutBath = tempVal;
+                instance.allowedDaysWithoutBath = tempVal;
 
             if (!int.TryParse(ConfigurationManager.AppSettings.Get("SilentAlarmBefore"), out tempVal))
-                Instance.SilentAlarmBefore = defaultSilentAlarmBefore;
+                instance.silentAlarmBefore = defaultSilentAlarmBefore;
             else
-                Instance.SilentAlarmBefore = tempVal;
+                instance.silentAlarmBefore = tempVal;
 
             if (!int.TryParse(ConfigurationManager.AppSettings.Get("SilentAlarmAfter"), out tempVal))
-                Instance.SilentAlarmAfter = defaultSilentAlarmAfter;
+                instance.silentAlarmAfter = defaultSilentAlarmAfter;
             else
-                Instance.SilentAlarmAfter = tempVal;
+                instance.silentAlarmAfter = tempVal;
 
-            bool useSilentAlarmAlways;
-            if (!bool.TryParse(ConfigurationManager.AppSettings.Get("SilentAlarmAlways"), out useSilentAlarmAlways))
-                Instance.SilentAlarmAlways = defaultSilentAlarmAlways;
+            bool tempBoolVal;
+            if (!bool.TryParse(ConfigurationManager.AppSettings.Get("SilentAlarmAlways"), out tempBoolVal))
+                instance.silentAlarmAlways = defaultSilentAlarmAlways;
             else
-                Instance.SilentAlarmAlways = useSilentAlarmAlways;
+                instance.silentAlarmAlways = tempBoolVal;
+
+            if (!bool.TryParse(ConfigurationManager.AppSettings.Get("UseXMLDatabase"), out tempBoolVal))
+                instance.useXMLDatabase = defaultUseXmlDatabase;
+            else
+                instance.useXMLDatabase = tempBoolVal;
         }
-
-        public int AllowedHrsWithoutDiaperChange { get; set; }
-        public int AllowedDaysWithoutBath { get; set; }
-        public int SilentAlarmBefore { get; set; }
-        public int SilentAlarmAfter { get; set; }
-        public bool SilentAlarmAlways { get; set; }
-        public string DatabaseConnectionString { get; set; }
-        public string XMLDatabaseFolder { get; set; }
-
-        public bool UseXMLDatabase { get { return !string.IsNullOrEmpty(Instance.XMLDatabaseFolder); } }
-
-        public static LovroAppSettings Instance { get; private set; }
-
-        public static int AllowedHrsWithoutDiaperChangeS { get { return Instance == null ? defaultWarnDiaperUnchangedAfterHrs : Instance.AllowedHrsWithoutDiaperChange; } }
-        public static int AllowedDaysWithoutBathS { get { return Instance == null ? defaultWarnHasNotBathedAfterDays : Instance.AllowedDaysWithoutBath; } }
-        public static int SilentAlarmBeforeS { get { return Instance == null ? defaultSilentAlarmBefore : Instance.SilentAlarmBefore; } }
-        public static int SilentAlarmAfterS { get { return Instance == null ? defaultSilentAlarmAfter : Instance.SilentAlarmAfter; } }
-        public static bool SilentAlarmAlwaysS { get { return Instance == null ? defaultSilentAlarmAlways : Instance.SilentAlarmAlways; } }
-        public static string DatabaseConnectionStringS { get { return Instance == null ? null : Instance.DatabaseConnectionString; } }
-        public static string XMLDatabaseFolderS { get { return Instance == null ? null : Instance.XMLDatabaseFolder; } }
+        
+        public static int AllowedHrsWithoutDiaperChange { get { return instance == null ? defaultWarnDiaperUnchangedAfterHrs : instance.allowedHrsWithoutDiaperChange; } }
+        public static int AllowedDaysWithoutBath { get { return instance == null ? defaultWarnHasNotBathedAfterDays : instance.allowedDaysWithoutBath; } }
+        public static int SilentAlarmBefore { get { return instance == null ? defaultSilentAlarmBefore : instance.silentAlarmBefore; } }
+        public static int SilentAlarmAfter { get { return instance == null ? defaultSilentAlarmAfter : instance.silentAlarmAfter; } }
+        public static bool SilentAlarmAlways { get { return instance == null ? defaultSilentAlarmAlways : instance.silentAlarmAlways; } }
+        public static string DataAccessDetails { get { return instance == null ? null : instance.dataAccessDetails; } }
+        public static bool UseXMLDatabase { get { return instance == null ? defaultUseXmlDatabase : instance.useXMLDatabase; } }
     }
 }

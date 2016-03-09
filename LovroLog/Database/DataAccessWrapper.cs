@@ -11,6 +11,7 @@ namespace LovroLog.Database
     {
         private bool useXMLDatabase = false;
         private LovroContext databaseAccessor;
+        private DataAccessXML xmlDatabaseAccessor;
 
         public DataAccessWrapper(string dataAccessDetails, bool useXMLDatabase)
         {
@@ -18,9 +19,9 @@ namespace LovroLog.Database
             this.useXMLDatabase = useXMLDatabase;
 
             if (useXMLDatabase)
-                throw new NotImplementedException();
-
-            this.databaseAccessor = new LovroContext(DataAccessDetails);
+                this.xmlDatabaseAccessor = new DataAccessXML(DataAccessDetails);
+            else
+                this.databaseAccessor = new LovroContext(DataAccessDetails);
         }
 
         public string DataAccessDetails { get; set; }
@@ -28,73 +29,77 @@ namespace LovroLog.Database
         public DatabaseSummary GetSummary()
         {
             if (useXMLDatabase)
-                throw new NotImplementedException();
-
-            return databaseAccessor.Summaries.FirstOrDefault();
+                return xmlDatabaseAccessor.GetSummary();
+            else
+                return databaseAccessor.Summaries.FirstOrDefault();
         }
 
         public IEnumerable<LovroBaseEvent> GetBaseEvents()
         {
             if (useXMLDatabase)
-                throw new NotImplementedException();
-
-            return databaseAccessor.BaseEvents;
+                return xmlDatabaseAccessor.GetBaseEvents();
+            else
+                return databaseAccessor.BaseEvents;
         }
 
         public IEnumerable<LovroDiaperChangedEvent> GetDiaperChangedEvents()
         {
             if (useXMLDatabase)
-                throw new NotImplementedException();
-
-            return databaseAccessor.DiaperChangedEvents;
+                return xmlDatabaseAccessor.GetDiaperChangedEvents();
+            else
+                return databaseAccessor.DiaperChangedEvents;
         }
 
         public DatabaseSummary GetDatabaseSummary()
         { 
             if (useXMLDatabase)
-                throw new NotImplementedException();
-            
-            return databaseAccessor.Summaries.FirstOrDefault();
+                return xmlDatabaseAccessor.GetSummary();
+            else
+                return databaseAccessor.Summaries.FirstOrDefault();
         }
 
         public void DeleteBaseEvent(int id)
         {
             if (useXMLDatabase)
-                throw new NotImplementedException();
-
-            LovroBaseEvent eventToDelete = databaseAccessor.BaseEvents.FirstOrDefault(item => item.ID == id);
-            if (eventToDelete != null)
+                xmlDatabaseAccessor.DeleteBaseEvent(id);
+            else
             {
-                databaseAccessor.BaseEvents.Remove(eventToDelete);
+                LovroBaseEvent eventToDelete = databaseAccessor.BaseEvents.FirstOrDefault(item => item.ID == id);
+                if (eventToDelete != null)
+                {
+                    databaseAccessor.BaseEvents.Remove(eventToDelete);
+                }
             }
         }
 
         public LovroBaseEvent AddBaseEvent(LovroBaseEvent newEvent)
         {
             if (useXMLDatabase)
-                throw new NotImplementedException();
-            
-            if (newEvent != null)
+                return xmlDatabaseAccessor.AddBaseEvent(newEvent);
+            else
             {
-                newEvent = databaseAccessor.BaseEvents.Add(newEvent);
-                return newEvent; // now with ID set automatically by the database
+                if (newEvent != null)
+                {
+                    return databaseAccessor.BaseEvents.Add(newEvent); // now with ID set automatically by the database
+                }
             }
-            
             return null;
         }
 
         public LovroBaseEvent EditBaseEvent(LovroBaseEvent editedEvent)
         {
             if (useXMLDatabase)
-                throw new NotImplementedException();
-
-            if (editedEvent != null)
+                xmlDatabaseAccessor.EditBaseEvent(editedEvent);
+            else
             {
-                LovroBaseEvent savedEvent = databaseAccessor.BaseEvents.FirstOrDefault(item => item.ID == editedEvent.ID);
-                if (savedEvent != null)
-                    savedEvent.CopyProperties(editedEvent);
+                if (editedEvent != null)
+                {
+                    LovroBaseEvent savedEvent = databaseAccessor.BaseEvents.FirstOrDefault(item => item.ID == editedEvent.ID);
+                    if (savedEvent != null)
+                        savedEvent.CopyProperties(editedEvent);
 
-                return savedEvent;
+                    return savedEvent;
+                }
             }
 
             return null;
