@@ -167,13 +167,25 @@ namespace LovroLog
             filterByTypeComboBox.DisplayMember = "Value";
             filterByTypeComboBox.ValueMember = "Key";
 
-            if (LovroAppSettings.SilentAlarmAlways)
-            {
-                ToggleSoundButton.Image = Resources.ResourceManager.GetObject("sound-off2-20") as Image;
-                SilentModeCheckBox.Checked = true;
-            }
-            else
-                ToggleSoundButton.Image = Resources.ResourceManager.GetObject("sound-20") as Image;
+            SetSoundAlarmControls(LovroAppSettings.SilentAlarmAlways);
+        }
+
+        private void SetSoundAlarmControls(bool setToSilent)
+        {
+            SilentModeCheckBox.Checked = setToSilent;
+            SetSoundAlarmSymbols(setToSilent);
+        }
+        
+        private void SetSoundAlarmSymbols(bool setToSilent)
+        {
+            Image setToImage = setToSilent ? Resources.ResourceManager.GetObject("sound-20") as Image : Resources.ResourceManager.GetObject("sound-off2-20") as Image;
+            if (setToImage == null)
+                return;
+
+            ToggleSoundButton.Image = setToImage;
+            ToolStripMenuItem menuItem = (contextMenuStrip1.Items.Find("ToggleSoundOnOffMenuItem", false).FirstOrDefault() as ToolStripMenuItem);
+            menuItem.Image = setToImage;
+            menuItem.Text = setToSilent ? "Uključi zvuk" : "Isključi zvuk";
         }
 
         private void ToggleLogButton_Click(object sender, EventArgs e)
@@ -408,8 +420,7 @@ namespace LovroLog
 
         private void RefreshStopwatch(object state)
         {
-            if (logListView.InvokeRequired)
-            {
+            if (logListView.InvokeRequired){
                 RefreshControlCallback callback = new RefreshControlCallback(RefreshStopwatch);
                 if (!this.Disposing)
                     this.Invoke(callback, new object[] { null });
@@ -681,7 +692,7 @@ namespace LovroLog
                 EditEvent();
         }
 
-        private void viewSleepChartButton_Click(object sender, EventArgs e)
+        private void DoViewSleepChart()
         {
             using (var form = new SleepChartForm(LovroAppSettings.DataAccessDetails, LovroAppSettings.UseXMLDatabase, displayedDatePicker.Value.Date))
             {
@@ -691,7 +702,12 @@ namespace LovroLog
             }
         }
 
-        private void AnalyzeDataButton_Click(object sender, EventArgs e)
+        private void viewSleepChartButton_Click(object sender, EventArgs e)
+        {
+            DoViewSleepChart();
+        }
+
+        private void DoAnalyzeData()
         {
             erroneousEvents = new Dictionary<int, DateTime>();
 
@@ -728,6 +744,11 @@ namespace LovroLog
             }
         }
 
+        private void AnalyzeDataButton_Click(object sender, EventArgs e)
+        {
+            DoAnalyzeData();
+        }
+
         private void PointToErroneousEvent()
         {
             logListView.Select();
@@ -755,17 +776,40 @@ namespace LovroLog
 
         private void ToggleSoundButton_Click(object sender, EventArgs e)
         {
-            SilentModeCheckBox.Checked = !SilentModeCheckBox.Checked;
-
-            if (SilentModeCheckBox.Checked)
-                (sender as Button).Image = Resources.ResourceManager.GetObject("sound-off2-20") as Image;
-            else
-                (sender as Button).Image = Resources.ResourceManager.GetObject("sound-20") as Image;
+            SetSoundAlarmControls(!SilentModeCheckBox.Checked);
         }
 
         private void goToTodayButton_Click(object sender, EventArgs e)
         {
             displayedDatePicker.Value = DateTime.Now;
+        }
+        
+        private void LovroLogForm_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                contextMenuStrip1.Show(this.Location.X + e.X, this.Location.Y + e.Y);
+            }
+        }
+
+        private void ViewReportMenuItem_Click(object sender, EventArgs e)
+        {
+            DoViewSleepChart();
+        }
+
+        private void ViewErrorsMenuItem_Click(object sender, EventArgs e)
+        {
+            DoAnalyzeData();
+        }
+
+        private void ToggleSoundOnOffMenuItem_Click(object sender, EventArgs e)
+        {
+            SetSoundAlarmControls(!SilentModeCheckBox.Checked);
+        }
+
+        private void EditDetailsMenuItem_Click(object sender, EventArgs e)
+        {
+            askForDetailsCheckBox.Checked = !askForDetailsCheckBox.Checked;
         }
     }
 }
