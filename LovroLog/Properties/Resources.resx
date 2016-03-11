@@ -133,14 +133,8 @@
   <data name="chart-20" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resursi\chart-20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="shit_20" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resursi\shit-20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="frog-icon-semitransparent" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resursi\frog-icon-semitransparent.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="edit-60px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resursi\edit-60px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="food_20px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resursi\food-20px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -175,6 +169,9 @@
   <data name="chart-32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resursi\chart-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Bath_20px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resursi\Bath-20px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="chart-60" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resursi\chart-60.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -184,6 +181,9 @@
   <data name="daisy-35" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resursi\daisy-35.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="minus_transparent-35" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resursi\minus_transparent-35.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="edit-darker-20px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resursi\edit-darker-20px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -192,9 +192,6 @@
   </data>
   <data name="errorViewer-20" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resursi\errorViewer-20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="diaper_wet_60" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resursi\diaper-wet-60.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="frog-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resursi\frog-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -208,11 +205,17 @@
   <data name="Bath_60px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resursi\Bath-60px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="daisy-45" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resursi\daisy-45.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Delete-60px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resursi\Delete-60px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Bath_20px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resursi\Bath-20px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="check-20" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resursi\check-20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diaper_wet_60" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resursi\diaper-wet-60.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="frog-bright" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resursi\frog-bright.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -226,17 +229,17 @@
   <data name="sound-32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resursi\sound-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="sound-off2-201" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resursi\sound-off2-20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="edit-20px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resursi\edit-20px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="daisy-45" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resursi\daisy-45.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="shit_60" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resursi\shit-60.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="minus_transparent-35" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resursi\minus_transparent-35.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="shit_20" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resursi\shit-20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="edit-60px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resursi\edit-60px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="diaper_wet_20" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resursi\diaper-wet-20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -247,13 +250,13 @@
   <data name="pruga" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resursi\pruga.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="shit_60" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resursi\shit-60.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="sound-off2-201" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resursi\sound-off2-20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="pruga1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resursi\pruga.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="check-20" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resursi\check-20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ellipsis-20px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resursi\ellipsis-20px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

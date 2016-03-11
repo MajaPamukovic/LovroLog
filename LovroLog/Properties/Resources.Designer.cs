@@ -233,6 +233,16 @@ namespace LovroLog.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ellipsis_20px {
+            get {
+                object obj = ResourceManager.GetObject("ellipsis-20px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ellipsis_60px {
             get {
                 object obj = ResourceManager.GetObject("ellipsis-60px", resourceCulture);
