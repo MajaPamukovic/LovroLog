@@ -810,6 +810,11 @@ namespace LovroLog
         private void EditDetailsMenuItem_Click(object sender, EventArgs e)
         {
             askForDetailsCheckBox.Checked = !askForDetailsCheckBox.Checked;
+
+            if (askForDetailsCheckBox.Checked)
+                (sender as ToolStripMenuItem).Image = Resources.check_20 as Image;
+            else
+                (sender as ToolStripMenuItem).Image = null;
         }
     }
 }

@@ -222,6 +222,7 @@
     <None Include="Resursi\chart-32.png" />
     <None Include="Resursi\chart-20.png" />
     <None Include="Resursi\errorViewer-20.png" />
+    <None Include="Resursi\check-20.png" />
     <Content Include="Resursi\frog-icon-semitransparent.png" />
     <None Include="Resursi\edit-darker-20px.png" />
     <None Include="Resursi\edit-60px.png" />

@@ -113,6 +113,16 @@ namespace LovroLog.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap check_20 {
+            get {
+                object obj = ResourceManager.GetObject("check-20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap daisy_35 {
             get {
                 object obj = ResourceManager.GetObject("daisy-35", resourceCulture);
