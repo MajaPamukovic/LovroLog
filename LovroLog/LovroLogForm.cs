@@ -570,7 +570,10 @@ namespace LovroLog
         private void DeleteEvents()
         {
             if (logListView.SelectedItems.Count < 1)
+            {
+                MessageBox.Show("Nijedan unos nije odabran.");
                 return;
+            }
 
             if (MessageBox.Show(string.Concat("Sigurno želiš obrisati odabrane unose? (", logListView.SelectedItems.Count, " komad(a))"), "Upozorenje", MessageBoxButtons.OKCancel) != DialogResult.OK)
                 return;
@@ -869,6 +872,16 @@ namespace LovroLog
         private void ViewErrorsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DoDisplayErrors();
+        }
+
+        private void EditEntryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EditEvent();
+        }
+
+        private void DeleteEntryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DeleteEvents();
         }
     }
 }
