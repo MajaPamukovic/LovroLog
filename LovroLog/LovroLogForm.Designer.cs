@@ -131,7 +131,7 @@
             // 
             this.stopwatchDiaperLabel.AutoSize = true;
             this.stopwatchDiaperLabel.Font = new System.Drawing.Font("Digital-7 Italic", 27.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stopwatchDiaperLabel.Location = new System.Drawing.Point(45, 71);
+            this.stopwatchDiaperLabel.Location = new System.Drawing.Point(45, 28);
             this.stopwatchDiaperLabel.Name = "stopwatchDiaperLabel";
             this.stopwatchDiaperLabel.Size = new System.Drawing.Size(131, 38);
             this.stopwatchDiaperLabel.TabIndex = 20;
@@ -142,7 +142,7 @@
             // 
             this.stopwatchFoodLabel.AutoSize = true;
             this.stopwatchFoodLabel.Font = new System.Drawing.Font("Digital-7 Italic", 27.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stopwatchFoodLabel.Location = new System.Drawing.Point(215, 71);
+            this.stopwatchFoodLabel.Location = new System.Drawing.Point(215, 28);
             this.stopwatchFoodLabel.Name = "stopwatchFoodLabel";
             this.stopwatchFoodLabel.Size = new System.Drawing.Size(131, 38);
             this.stopwatchFoodLabel.TabIndex = 23;
@@ -153,7 +153,7 @@
             // 
             this.stopwatchSleepLabel.AutoSize = true;
             this.stopwatchSleepLabel.Font = new System.Drawing.Font("Digital-7 Italic", 27.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stopwatchSleepLabel.Location = new System.Drawing.Point(378, 71);
+            this.stopwatchSleepLabel.Location = new System.Drawing.Point(378, 28);
             this.stopwatchSleepLabel.Name = "stopwatchSleepLabel";
             this.stopwatchSleepLabel.Size = new System.Drawing.Size(131, 38);
             this.stopwatchSleepLabel.TabIndex = 24;
@@ -374,7 +374,7 @@
             // toggleLogPBoxBtn
             // 
             this.toggleLogPBoxBtn.Image = global::LovroLog.Properties.Resources.plus3d_35px;
-            this.toggleLogPBoxBtn.Location = new System.Drawing.Point(503, 59);
+            this.toggleLogPBoxBtn.Location = new System.Drawing.Point(503, 73);
             this.toggleLogPBoxBtn.Name = "toggleLogPBoxBtn";
             this.toggleLogPBoxBtn.Size = new System.Drawing.Size(36, 35);
             this.toggleLogPBoxBtn.TabIndex = 30;
@@ -388,7 +388,7 @@
             // 
             this.stopwatchSleepPictureBox.Image = global::LovroLog.Properties.Resources.sleep_transparent_60opx;
             this.stopwatchSleepPictureBox.InitialImage = global::LovroLog.Properties.Resources.food_20px;
-            this.stopwatchSleepPictureBox.Location = new System.Drawing.Point(340, 69);
+            this.stopwatchSleepPictureBox.Location = new System.Drawing.Point(340, 26);
             this.stopwatchSleepPictureBox.Name = "stopwatchSleepPictureBox";
             this.stopwatchSleepPictureBox.Size = new System.Drawing.Size(40, 40);
             this.stopwatchSleepPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -400,7 +400,7 @@
             // 
             this.stopwatchFoodPictureBox.Image = global::LovroLog.Properties.Resources.food_60px;
             this.stopwatchFoodPictureBox.InitialImage = global::LovroLog.Properties.Resources.food_20px;
-            this.stopwatchFoodPictureBox.Location = new System.Drawing.Point(177, 69);
+            this.stopwatchFoodPictureBox.Location = new System.Drawing.Point(177, 26);
             this.stopwatchFoodPictureBox.Name = "stopwatchFoodPictureBox";
             this.stopwatchFoodPictureBox.Size = new System.Drawing.Size(40, 40);
             this.stopwatchFoodPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -412,7 +412,7 @@
             // 
             this.stopwatchDiaperPictureBox.Image = global::LovroLog.Properties.Resources.diaper_poopy_60;
             this.stopwatchDiaperPictureBox.InitialImage = global::LovroLog.Properties.Resources.diaper_poopy_60;
-            this.stopwatchDiaperPictureBox.Location = new System.Drawing.Point(7, 69);
+            this.stopwatchDiaperPictureBox.Location = new System.Drawing.Point(7, 26);
             this.stopwatchDiaperPictureBox.Name = "stopwatchDiaperPictureBox";
             this.stopwatchDiaperPictureBox.Size = new System.Drawing.Size(40, 40);
             this.stopwatchDiaperPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -498,7 +498,7 @@
             this.windowsSubmenuToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1090, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(539, 24);
             this.menuStrip1.TabIndex = 36;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -618,7 +618,7 @@
             this.otherEventButton.Font = new System.Drawing.Font("Segoe Script", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.otherEventButton.Image = global::LovroLog.Properties.Resources.ellipsis_60px;
             this.otherEventButton.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.otherEventButton.Location = new System.Drawing.Point(347, 279);
+            this.otherEventButton.Location = new System.Drawing.Point(347, 259);
             this.otherEventButton.Name = "otherEventButton";
             this.otherEventButton.Size = new System.Drawing.Size(154, 102);
             this.otherEventButton.TabIndex = 31;
@@ -633,7 +633,7 @@
             this.poopyDiaperChangedButton.Font = new System.Drawing.Font("Segoe Script", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.poopyDiaperChangedButton.Image = global::LovroLog.Properties.Resources.diaper_poopy_60;
             this.poopyDiaperChangedButton.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.poopyDiaperChangedButton.Location = new System.Drawing.Point(178, 407);
+            this.poopyDiaperChangedButton.Location = new System.Drawing.Point(178, 386);
             this.poopyDiaperChangedButton.Name = "poopyDiaperChangedButton";
             this.poopyDiaperChangedButton.Size = new System.Drawing.Size(154, 102);
             this.poopyDiaperChangedButton.TabIndex = 7;
@@ -648,7 +648,7 @@
             this.bathedButton.Font = new System.Drawing.Font("Segoe Script", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.bathedButton.Image = global::LovroLog.Properties.Resources.Bath_60px;
             this.bathedButton.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.bathedButton.Location = new System.Drawing.Point(347, 151);
+            this.bathedButton.Location = new System.Drawing.Point(347, 136);
             this.bathedButton.Name = "bathedButton";
             this.bathedButton.Size = new System.Drawing.Size(154, 102);
             this.bathedButton.TabIndex = 6;
@@ -663,7 +663,7 @@
             this.wetDiaperChangedButton.Font = new System.Drawing.Font("Segoe Script", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.wetDiaperChangedButton.Image = global::LovroLog.Properties.Resources.diaper_wet_60;
             this.wetDiaperChangedButton.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.wetDiaperChangedButton.Location = new System.Drawing.Point(8, 407);
+            this.wetDiaperChangedButton.Location = new System.Drawing.Point(8, 386);
             this.wetDiaperChangedButton.Name = "wetDiaperChangedButton";
             this.wetDiaperChangedButton.Size = new System.Drawing.Size(154, 102);
             this.wetDiaperChangedButton.TabIndex = 5;
@@ -678,7 +678,7 @@
             this.wokeUpButton.Font = new System.Drawing.Font("Segoe Script", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.wokeUpButton.Image = global::LovroLog.Properties.Resources.wakeUp_transparent_60px;
             this.wokeUpButton.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.wokeUpButton.Location = new System.Drawing.Point(178, 279);
+            this.wokeUpButton.Location = new System.Drawing.Point(178, 259);
             this.wokeUpButton.Name = "wokeUpButton";
             this.wokeUpButton.Size = new System.Drawing.Size(154, 102);
             this.wokeUpButton.TabIndex = 3;
@@ -693,7 +693,7 @@
             this.fellAsleep.Font = new System.Drawing.Font("Segoe Script", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.fellAsleep.Image = global::LovroLog.Properties.Resources.sleep_transparent_60opx;
             this.fellAsleep.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.fellAsleep.Location = new System.Drawing.Point(8, 279);
+            this.fellAsleep.Location = new System.Drawing.Point(8, 260);
             this.fellAsleep.Name = "fellAsleep";
             this.fellAsleep.Size = new System.Drawing.Size(154, 102);
             this.fellAsleep.TabIndex = 2;
@@ -708,7 +708,7 @@
             this.foodButton.Font = new System.Drawing.Font("Segoe Script", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.foodButton.Image = global::LovroLog.Properties.Resources.food_60px;
             this.foodButton.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.foodButton.Location = new System.Drawing.Point(8, 151);
+            this.foodButton.Location = new System.Drawing.Point(8, 136);
             this.foodButton.Name = "foodButton";
             this.foodButton.Size = new System.Drawing.Size(154, 102);
             this.foodButton.TabIndex = 1;
@@ -723,7 +723,7 @@
             this.shitButton.Font = new System.Drawing.Font("Segoe Script", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.shitButton.Image = global::LovroLog.Properties.Resources.shit_60;
             this.shitButton.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.shitButton.Location = new System.Drawing.Point(178, 151);
+            this.shitButton.Location = new System.Drawing.Point(178, 136);
             this.shitButton.Name = "shitButton";
             this.shitButton.Size = new System.Drawing.Size(154, 102);
             this.shitButton.TabIndex = 0;
@@ -747,7 +747,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(183)))), ((int)(((byte)(235)))), ((int)(((byte)(206)))));
-            this.ClientSize = new System.Drawing.Size(1090, 622);
+            this.ClientSize = new System.Drawing.Size(539, 622);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.ToggleSoundButton);
             this.Controls.Add(this.SilentModeCheckBox);
