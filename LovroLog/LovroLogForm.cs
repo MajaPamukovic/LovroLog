@@ -186,6 +186,10 @@ namespace LovroLog
             ToolStripMenuItem menuItem = (contextMenuStrip1.Items.Find("ToggleSoundOnOffMenuItem", false).FirstOrDefault() as ToolStripMenuItem);
             menuItem.Image = setToImage;
             menuItem.Text = setToSilent ? "Uključi zvuk" : "Isključi zvuk";
+
+            menuItem = (menuStrip1.Items.Find("ToggleSoundToolStripMenuItem", true).FirstOrDefault() as ToolStripMenuItem);
+            menuItem.Image = setToImage;
+            menuItem.Text = setToSilent ? "Uključi zvuk" : "Isključi zvuk";
         }
 
         private void ToggleLogButton_Click(object sender, EventArgs e)
@@ -707,7 +711,7 @@ namespace LovroLog
             DoViewSleepChart();
         }
 
-        private void DoAnalyzeData()
+        private void DoDisplayErrors()
         {
             erroneousEvents = new Dictionary<int, DateTime>();
 
@@ -744,9 +748,9 @@ namespace LovroLog
             }
         }
 
-        private void AnalyzeDataButton_Click(object sender, EventArgs e)
+        private void DisplayErrorsButton_Click(object sender, EventArgs e)
         {
-            DoAnalyzeData();
+            DoDisplayErrors();
         }
 
         private void PointToErroneousEvent()
@@ -799,7 +803,7 @@ namespace LovroLog
 
         private void ViewErrorsMenuItem_Click(object sender, EventArgs e)
         {
-            DoAnalyzeData();
+            DoDisplayErrors();
         }
 
         private void ToggleSoundOnOffMenuItem_Click(object sender, EventArgs e)
@@ -815,6 +819,56 @@ namespace LovroLog
                 (sender as ToolStripMenuItem).Image = Resources.check_20 as Image;
             else
                 (sender as ToolStripMenuItem).Image = null;
+        }
+
+        private void AteFoodToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FoodButton_Click(sender, e);
+        }
+
+        private void FellAsleepToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FellAsleep_Click(sender, e);
+        }
+
+        private void WokeUpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WokeUpButton_Click(sender, e);
+        }
+
+        private void PoopyDiaperToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PoopyDiaperChangedButton_Click(sender, e);
+        }
+
+        private void WetDiaperToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WetDiaperChangedButton_Click(sender, e);
+        }
+
+        private void OtherEventToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            otherEventButton_Click(sender, e);
+        }
+
+        private void ToggleSoundToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetSoundAlarmControls(!SilentModeCheckBox.Checked);
+        }
+
+        private void EditDetailsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EditDetailsMenuItem_Click(sender, e);
+        }
+
+        private void SleepChartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DoViewSleepChart();
+        }
+
+        private void ViewErrorsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DoDisplayErrors();
         }
     }
 }
