@@ -261,6 +261,9 @@ namespace LovroLog
                 case LovroEventType.Other:
                     return 7;
 
+                case LovroEventType.WeighIn:
+                    return 8;
+
                 case LovroEventType.Default:
                     return -1;
 

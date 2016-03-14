@@ -32,5 +32,8 @@ namespace LovroLog.Enums
 
         [Description("Razno")]
         Other,
+
+        [Description("Mjerenje težine/visine")]
+        WeighIn
     }
 }

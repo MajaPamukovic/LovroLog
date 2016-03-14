@@ -86,6 +86,7 @@
     <Compile Include="LovroEventEditForm.Designer.cs">
       <DependentUpon>LovroEventEditForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="LovroEvents\LovroWeighInEvent.cs" />
     <Compile Include="LovroLogForm.cs">
       <SubType>Form</SubType>
     </Compile>

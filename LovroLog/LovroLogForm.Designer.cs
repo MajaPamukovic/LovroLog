@@ -129,6 +129,7 @@
             this.imageList1.Images.SetKeyName(5, "sleep-transparent-20px.png");
             this.imageList1.Images.SetKeyName(6, "wakeUp-transparent-20px.png");
             this.imageList1.Images.SetKeyName(7, "ellipsis-20px.png");
+            this.imageList1.Images.SetKeyName(8, "scale3-26.png");
             // 
             // stopwatchDiaperLabel
             // 
