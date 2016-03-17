@@ -54,12 +54,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AskForDetailsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AskForDetailsForm.Designer.cs">
-      <DependentUpon>AskForDetailsForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Database\DataAccessWrapper.cs" />
     <Compile Include="Database\DataAccessXML.cs" />
     <Compile Include="Database\DatabaseSummary.cs" />
@@ -109,9 +103,6 @@
     <Compile Include="SleepChartForm.Designer.cs">
       <DependentUpon>SleepChartForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AskForDetailsForm.resx">
-      <DependentUpon>AskForDetailsForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ErroneousEventsListForm.resx">
       <DependentUpon>ErroneousEventsListForm.cs</DependentUpon>
     </EmbeddedResource>

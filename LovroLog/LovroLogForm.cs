@@ -137,16 +137,10 @@ namespace LovroLog
         {
             if (askForDetailsCheckBox.Checked || Control.ModifierKeys == Keys.Control || lovroEvent.Type == LovroEventType.Other)
             {
-                using (var form = new AskForDetailsForm())
+                using (var form = new LovroEventEditForm())
                 {
-                    var result = form.ShowDialog();
-                    if (result == DialogResult.OK)
-                    {
-                        lovroEvent.Note = form.EnteredNote;
-                        lovroEvent.Time = form.EnteredTime;
-                    }
-                    else
-                        return false;
+                    form.EventInEditing = lovroEvent;
+                    return form.ShowDialog() == DialogResult.OK;
                 }
             }
 
