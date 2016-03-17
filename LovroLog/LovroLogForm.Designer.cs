@@ -75,6 +75,12 @@
             this.PoopyDiaperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.WetDiaperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OtherEventToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.EditSubmenuMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.EditEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DeleteEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.ImportFromXMLMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExportToXMLMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsSubmenuMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.EditDetailsPreferenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToggleSoundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -90,9 +96,6 @@
             this.foodButton = new System.Windows.Forms.Button();
             this.shitButton = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.EditSubmenuMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.EditEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.DeleteEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.filterByTypeGroupBox.SuspendLayout();
             this.dateGroupBox.SuspendLayout();
             this.rightSidePanel.SuspendLayout();
@@ -568,6 +571,53 @@
             this.OtherEventToolStripMenuItem.Text = "Razno";
             this.OtherEventToolStripMenuItem.Click += new System.EventHandler(this.OtherEventToolStripMenuItem_Click);
             // 
+            // EditSubmenuMenuItem
+            // 
+            this.EditSubmenuMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.EditEntryToolStripMenuItem,
+            this.DeleteEntryToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.ImportFromXMLMenuItem,
+            this.ExportToXMLMenuItem});
+            this.EditSubmenuMenuItem.Name = "EditSubmenuMenuItem";
+            this.EditSubmenuMenuItem.Size = new System.Drawing.Size(75, 20);
+            this.EditSubmenuMenuItem.Text = "Uređivanje";
+            // 
+            // EditEntryToolStripMenuItem
+            // 
+            this.EditEntryToolStripMenuItem.Image = global::LovroLog.Properties.Resources.edit_darker_20px;
+            this.EditEntryToolStripMenuItem.Name = "EditEntryToolStripMenuItem";
+            this.EditEntryToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.EditEntryToolStripMenuItem.Text = "Uredi unos";
+            this.EditEntryToolStripMenuItem.Click += new System.EventHandler(this.EditEntryToolStripMenuItem_Click);
+            // 
+            // DeleteEntryToolStripMenuItem
+            // 
+            this.DeleteEntryToolStripMenuItem.Image = global::LovroLog.Properties.Resources.Delete_20px;
+            this.DeleteEntryToolStripMenuItem.Name = "DeleteEntryToolStripMenuItem";
+            this.DeleteEntryToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.DeleteEntryToolStripMenuItem.Text = "Izbriši unos";
+            this.DeleteEntryToolStripMenuItem.Click += new System.EventHandler(this.DeleteEntryToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(157, 6);
+            // 
+            // ImportFromXMLMenuItem
+            // 
+            this.ImportFromXMLMenuItem.Name = "ImportFromXMLMenuItem";
+            this.ImportFromXMLMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.ImportFromXMLMenuItem.Text = "Uvezi iz XML-a...";
+            this.ImportFromXMLMenuItem.Click += new System.EventHandler(this.ImportFromXMLMenuItem_Click);
+            // 
+            // ExportToXMLMenuItem
+            // 
+            this.ExportToXMLMenuItem.Name = "ExportToXMLMenuItem";
+            this.ExportToXMLMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.ExportToXMLMenuItem.Text = "Izvezi u XML...";
+            this.ExportToXMLMenuItem.Click += new System.EventHandler(this.ExportToXMLMenuItem_Click);
+            // 
             // optionsSubmenuMenuItem
             // 
             this.optionsSubmenuMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -747,31 +797,6 @@
             this.pictureBox2.TabIndex = 29;
             this.pictureBox2.TabStop = false;
             // 
-            // EditSubmenuMenuItem
-            // 
-            this.EditSubmenuMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.EditEntryToolStripMenuItem,
-            this.DeleteEntryToolStripMenuItem});
-            this.EditSubmenuMenuItem.Name = "EditSubmenuMenuItem";
-            this.EditSubmenuMenuItem.Size = new System.Drawing.Size(75, 20);
-            this.EditSubmenuMenuItem.Text = "Uređivanje";
-            // 
-            // EditEntryToolStripMenuItem
-            // 
-            this.EditEntryToolStripMenuItem.Image = global::LovroLog.Properties.Resources.edit_darker_20px;
-            this.EditEntryToolStripMenuItem.Name = "EditEntryToolStripMenuItem";
-            this.EditEntryToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.EditEntryToolStripMenuItem.Text = "Uredi unos";
-            this.EditEntryToolStripMenuItem.Click += new System.EventHandler(this.EditEntryToolStripMenuItem_Click);
-            // 
-            // DeleteEntryToolStripMenuItem
-            // 
-            this.DeleteEntryToolStripMenuItem.Image = global::LovroLog.Properties.Resources.Delete_20px;
-            this.DeleteEntryToolStripMenuItem.Name = "DeleteEntryToolStripMenuItem";
-            this.DeleteEntryToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.DeleteEntryToolStripMenuItem.Text = "Izbriši unos";
-            this.DeleteEntryToolStripMenuItem.Click += new System.EventHandler(this.DeleteEntryToolStripMenuItem_Click);
-            // 
             // LovroLogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -895,6 +920,9 @@
         private System.Windows.Forms.ToolStripMenuItem EditSubmenuMenuItem;
         private System.Windows.Forms.ToolStripMenuItem EditEntryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem DeleteEntryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ImportFromXMLMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ExportToXMLMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }
 

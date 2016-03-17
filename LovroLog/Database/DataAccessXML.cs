@@ -28,13 +28,12 @@ namespace LovroLog.Database
 
         public static string _ERR_ITEM_NOT_FOUND = "The specified item could not be found";
         public static string _ERR_FETCHING_DATA = "Failed to retrieve data from the XML database";
-        public static string _DOCUMENT_ROOT = "Events";
 
         private XmlSerializer serializer;
 
         public DataAccessXML()
         {
-            this.serializer = new XmlSerializer(typeof(List<LovroBaseEvent>), new XmlRootAttribute() { ElementName = _DOCUMENT_ROOT, IsNullable = true });
+            this.serializer = new XmlSerializer(typeof(List<LovroBaseEvent>), new Type[] { typeof(LovroBaseEvent), typeof(LovroDiaperChangedEvent), typeof(LovroWeighInEvent) });
         }
 
         public DataAccessXML(string dataAccessDetails)
@@ -125,6 +124,14 @@ namespace LovroLog.Database
             SaveToFile(currentList);
         }
 
+        public void LoadBaseEvents(List<LovroBaseEvent> items)
+        {
+            if (items == null || !items.Any())
+                return;
+            
+            SaveToFile(items);
+        }
+
         public DatabaseSummary GetSummary()
         {
             return GetSummaries().FirstOrDefault();
@@ -132,7 +139,7 @@ namespace LovroLog.Database
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
         private int GetNewID() // užasno

@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Media;
 using System.Reflection;
@@ -879,6 +880,61 @@ namespace LovroLog
         private void DeleteEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DeleteEvents();
+        }
+
+        private void ImportFromXMLMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var fileDialog = new OpenFileDialog() { Multiselect = false })
+            {
+                if (fileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    ImportFromXML(fileDialog.FileName);
+                }
+            }
+        }
+
+        private void ExportToXMLMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var fileDialog = new OpenFileDialog() { Multiselect = false })
+            {
+                if (fileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    ExportToXML(fileDialog.FileName);
+                }
+            }
+        }
+
+        private void ImportFromXML(string filePath)
+        {
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException("The source XML file could not be found.");
+
+            if (MessageBox.Show("Jeste li sigurni da želite uvesti podatke iz odabrane datoteke?", "Upozorenje", MessageBoxButtons.OKCancel) != DialogResult.OK)
+                return;
+
+            using (var dataAccess = new DataAccessWrapper(LovroAppSettings.DataAccessDetails, LovroAppSettings.UseXMLDatabase))
+            {
+                using (var dataToImport = new DataAccessXML(filePath))
+                {
+                    // no merging of events based on ID! IDs from the import file will be ignored and all items found in file will be added to the database as new entries
+                    dataToImport.GetBaseEvents().ToList().ForEach(lovroEvent => dataAccess.AddBaseEvent(lovroEvent));
+                }
+            }
+        }
+
+        private void ExportToXML(string filePath)
+        {
+            if (File.Exists(filePath))
+                if (MessageBox.Show("Odredišna datoteka već postoji. Nastaviti?", "Upozorenje", MessageBoxButtons.OKCancel) != DialogResult.OK)
+                    return;
+
+            using (var dataAccess = new DataAccessWrapper(LovroAppSettings.DataAccessDetails, LovroAppSettings.UseXMLDatabase))
+            {
+                using (var dataToExport = new DataAccessXML(filePath))
+                {
+                    dataToExport.LoadBaseEvents(dataAccess.GetBaseEvents().ToList());
+                }
+            }
         }
     }
 }
