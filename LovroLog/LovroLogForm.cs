@@ -1,4 +1,5 @@
-﻿using LovroLog.Enums;
+﻿using LovroLog.Database;
+using LovroLog.Enums;
 using LovroLog.LovroEvents;
 using LovroLog.Properties;
 using System;
@@ -7,6 +8,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Media;
 using System.Reflection;
@@ -21,22 +23,15 @@ namespace LovroLog
     {
         #region Private fields
 
-        #region Default settings values
-        private const int defaultWarnDiaperUnchangedAfterHrs = 3;
-        private const int defaultWarnHasNotBathedAfterDays = 4;
-        #endregion
-
-        private int warnDiaperUnchangedAfterHrs;
-        private int warnHasNotBathedAfterDays;
-        private string connectionString = "";
         private bool logDisplayed;
         private DateTime lastDataUpdate;
         private DateTime lastRedraw;
         private System.Media.SoundPlayer player;
         private bool warningDisplayed = false;
-        private bool ignoreWarnings = false;
-        private DateTime warningLastSet, warningLastIgnored;
-
+        private DateTime lastWarningConditionSetRelatedToDiaperChangeAt;
+        private Dictionary<int, DateTime> erroneousEvents;
+        private int? errorSelectedItemID;
+        
         #region Timers
         private System.Threading.Timer refreshLogViewTimer;
         private System.Threading.Timer soundWarningTimer;
@@ -48,14 +43,6 @@ namespace LovroLog
         public LovroLogForm()
         {
             InitializeComponent();
-
-            if (!int.TryParse(ConfigurationManager.AppSettings.Get("AllowedHrsWithoutDiaperChange"), out warnDiaperUnchangedAfterHrs))
-                warnDiaperUnchangedAfterHrs = defaultWarnDiaperUnchangedAfterHrs;
-
-            if (!int.TryParse(ConfigurationManager.AppSettings.Get("AllowedHrsWithoutDiaperChange"), out warnHasNotBathedAfterDays))
-                warnHasNotBathedAfterDays = defaultWarnHasNotBathedAfterDays;
-
-            connectionString = ConfigurationManager.AppSettings.Get("DatabaseConnectionString");
 
             logListView.View = View.Details;
             logListView.GridLines = false;
@@ -72,22 +59,21 @@ namespace LovroLog
             logDisplayed = false;
             lastDataUpdate = DateTime.MinValue;
             lastRedraw = DateTime.MinValue;
-            warningLastSet = DateTime.MinValue;
-            warningLastIgnored = DateTime.MinValue;
+            lastWarningConditionSetRelatedToDiaperChangeAt = DateTime.MinValue;
 
             refreshLogViewTimer = new System.Threading.Timer(this.RefreshLines, null, 0, 300);
             soundWarningTimer = new System.Threading.Timer(this.CheckSoundWarning, null, 1000, 1000);
             stopwatchTimer = new System.Threading.Timer(this.RefreshStopwatch, null, 1500, 1000);
         }
 
-        private int GetDiaperChangeWarningLimitInMinutes()
+        private double GetDiaperChangeWarningLimitInMinutes()
         {
-            return warnDiaperUnchangedAfterHrs * 60;
+            return LovroAppSettings.AllowedHrsWithoutDiaperChange * 60;
         }
 
         private int GetBathWarningLimitInMinutes()
         {
-            return warnHasNotBathedAfterDays * 24 * 60;
+            return LovroAppSettings.AllowedDaysWithoutBath * 24 * 60;
         }
 
         private void ShitButton_Click(object sender, EventArgs e)
@@ -142,12 +128,9 @@ namespace LovroLog
                 return;
             }
 
-            using (var context = new LovroContext(connectionString))
+            using (var dataAccess = new DataAccessWrapper(LovroAppSettings.DataAccessDetails, LovroAppSettings.UseXMLDatabase))
             {
-                //context.AddBaseEvent(lovroEvent);
-
-                context.BaseEvents.Add(lovroEvent);
-                context.SaveChanges();
+                dataAccess.AddBaseEvent(lovroEvent);
             }
         }
 
@@ -155,16 +138,10 @@ namespace LovroLog
         {
             if (askForDetailsCheckBox.Checked || Control.ModifierKeys == Keys.Control || lovroEvent.Type == LovroEventType.Other)
             {
-                using (var form = new AskForDetailsForm())
+                using (var form = new LovroEventEditForm())
                 {
-                    var result = form.ShowDialog();
-                    if (result == DialogResult.OK)
-                    {
-                        lovroEvent.Note = form.EnteredNote;
-                        lovroEvent.Time = form.EnteredTime;
-                    }
-                    else
-                        return false;
+                    form.EventInEditing = lovroEvent;
+                    return form.ShowDialog() == DialogResult.OK;
                 }
             }
 
@@ -185,7 +162,29 @@ namespace LovroLog
             filterByTypeComboBox.DisplayMember = "Value";
             filterByTypeComboBox.ValueMember = "Key";
 
+            SetSoundAlarmControls(LovroAppSettings.SilentAlarmAlways);
+        }
 
+        private void SetSoundAlarmControls(bool setToSilent)
+        {
+            SilentModeCheckBox.Checked = setToSilent;
+            SetSoundAlarmSymbols(setToSilent);
+        }
+        
+        private void SetSoundAlarmSymbols(bool setToSilent)
+        {
+            Image setToImage = setToSilent ? Resources.ResourceManager.GetObject("sound-20") as Image : Resources.ResourceManager.GetObject("sound-off2-20") as Image;
+            if (setToImage == null)
+                return;
+
+            ToggleSoundButton.Image = setToImage;
+            ToolStripMenuItem menuItem = (contextMenuStrip1.Items.Find("ToggleSoundOnOffMenuItem", false).FirstOrDefault() as ToolStripMenuItem);
+            menuItem.Image = setToImage;
+            menuItem.Text = setToSilent ? "Uključi zvuk" : "Isključi zvuk";
+
+            menuItem = (menuStrip1.Items.Find("ToggleSoundToolStripMenuItem", true).FirstOrDefault() as ToolStripMenuItem);
+            menuItem.Image = setToImage;
+            menuItem.Text = setToSilent ? "Uključi zvuk" : "Isključi zvuk";
         }
 
         private void ToggleLogButton_Click(object sender, EventArgs e)
@@ -257,6 +256,9 @@ namespace LovroLog
                 case LovroEventType.Other:
                     return 7;
 
+                case LovroEventType.WeighIn:
+                    return 8;
+
                 case LovroEventType.Default:
                     return -1;
 
@@ -272,7 +274,7 @@ namespace LovroLog
                 viewItem.ImageIndex = imageIndex;
         }
 
-        private ListViewItem CreateViewItem(LovroBaseEvent lovroEvent, LovroContext context)
+        private ListViewItem CreateViewItem(LovroBaseEvent lovroEvent, DataAccessWrapper dataAccess)
         {
             ListViewItem viewItem = new ListViewItem(lovroEvent.Time.ToString());
             viewItem.Tag = lovroEvent.ID;
@@ -291,12 +293,12 @@ namespace LovroLog
 
             if (lovroEvent.Type == LovroEventType.DiaperChanged)
             {
-                LovroBaseEvent diaperLastChanged = context.BaseEvents.Where(item => item.Type == LovroEventType.DiaperChanged && item.ID != lovroEvent.ID && item.Time < lovroEvent.Time).OrderByDescending(item => item.Time).FirstOrDefault();
+                LovroBaseEvent diaperLastChanged = dataAccess.GetBaseEvents().Where(item => item.Type == LovroEventType.DiaperChanged && item.ID != lovroEvent.ID && item.Time < lovroEvent.Time).OrderByDescending(item => item.Time).FirstOrDefault();
                 viewItem.SubItems.Add(diaperLastChanged == null ? "" : (lovroEvent.Time - diaperLastChanged.Time).ToString(@"hh\:mm"));
             }
             else if (lovroEvent.Type == LovroEventType.WokeUp)
             {
-                LovroBaseEvent lastFellAsleepEvent = context.BaseEvents.Where(item => item.Type == LovroEventType.FellAsleep && item.Time < lovroEvent.Time).OrderByDescending(item => item.Time).FirstOrDefault();
+                LovroBaseEvent lastFellAsleepEvent = dataAccess.GetBaseEvents().Where(item => item.Type == LovroEventType.FellAsleep && item.Time < lovroEvent.Time).OrderByDescending(item => item.Time).FirstOrDefault();
                 if (lastFellAsleepEvent != null)
                     viewItem.SubItems.Add((lovroEvent.Time - lastFellAsleepEvent.Time).ToString(@"hh\:mm"));
             }
@@ -312,16 +314,15 @@ namespace LovroLog
 
         private void RefreshLines(object state)
         {
-            using (var context = new LovroContext(connectionString))
+            using (var dataAccess = new DataAccessWrapper(LovroAppSettings.DataAccessDetails, LovroAppSettings.UseXMLDatabase))
             {
-                DatabaseSummary summary = context.Summaries.FirstOrDefault();
-
+                DatabaseSummary summary = dataAccess.GetSummary();
                 if (summary != null)
                     lastDataUpdate = summary.LastModified;
                 else
                     lastDataUpdate = DateTime.MinValue.AddSeconds(1);
             }
-
+            
             if (lastDataUpdate > lastRedraw)
             {
                 if (logListView.InvokeRequired)
@@ -333,7 +334,7 @@ namespace LovroLog
                 {
                     logListView.Items.Clear();
 
-                    using (var context = new LovroContext(connectionString))
+                    using (var dataAccess = new DataAccessWrapper(LovroAppSettings.DataAccessDetails, LovroAppSettings.UseXMLDatabase))
                     {
                         LovroEventType typeFilter = LovroEventType.Default;
                         if (!Enum.TryParse(((KeyValuePair<string, string>)filterByTypeComboBox.SelectedItem).Key, out typeFilter))
@@ -342,8 +343,8 @@ namespace LovroLog
                         DateTime dateFilter = displayedDatePicker.Value.Date;
 
                         #region Displaying individual items
-                        
-                        foreach (LovroBaseEvent lovroEvent in context.BaseEvents.OrderBy(item => item.Time))
+
+                        foreach (LovroBaseEvent lovroEvent in dataAccess.GetBaseEvents().OrderBy(item => item.Time))
                         {
                             if (filterByTypeCheckBox.Checked && typeFilter != LovroEventType.Default && typeFilter != lovroEvent.Type)
                                 continue;
@@ -351,7 +352,7 @@ namespace LovroLog
                             if (filterByDateCheckBox.Checked && dateFilter != lovroEvent.Time.Date)
                                 continue;
 
-                            ListViewItem viewItem = CreateViewItem(lovroEvent, context);
+                            ListViewItem viewItem = CreateViewItem(lovroEvent, dataAccess);
                             logListView.Items.Add(viewItem);
 
                             if (viewItem.Index % 2 == 0)
@@ -360,10 +361,11 @@ namespace LovroLog
                             logListView.TopItem = viewItem;
                             logListView.EnsureVisible(logListView.Items.Count - 1);
                         }
-                        
+
                         logListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                        PointToErroneousEvent();
                         Refresh();
-                        
+
                         #endregion
 
                         #region Displaying summary info
@@ -378,33 +380,35 @@ namespace LovroLog
                         #region Calculating total nap time
 
                         TimeSpan totalNapTime = TimeSpan.Zero;
-                        IEnumerable<LovroBaseEvent> wakeUpEvents = context.BaseEvents.Where(item => item.Time >= today && item.Time < tomorrow && item.Type == LovroEventType.WokeUp);
-                        IEnumerable<LovroBaseEvent> correspondingFellAsleepEvents = wakeUpEvents.Select(wakeUpEvent => context.BaseEvents.OrderByDescending(item => item.Time).FirstOrDefault(item => item.Type == LovroEventType.FellAsleep && wakeUpEvent.Time > item.Time));
+
+                        IEnumerable<LovroBaseEvent> wakeUpEvents = dataAccess.GetBaseEvents().Where(item => item != null && (item.Time >= today && item.Time < tomorrow && item.Type == LovroEventType.WokeUp));
+                        IEnumerable<LovroBaseEvent> correspondingFellAsleepEvents = wakeUpEvents.Select(wakeUpEvent => dataAccess.GetBaseEvents().OrderByDescending(item => item.Time).FirstOrDefault(item => item.Type == LovroEventType.FellAsleep && wakeUpEvent.Time > item.Time));
+                        wakeUpEvents = wakeUpEvents.Where(wakeUpEvent => wakeUpEvent != null);
+                        correspondingFellAsleepEvents = correspondingFellAsleepEvents.Where(item => item != null);
 
                         wakeUpCount = wakeUpEvents.Count();
-                        if (wakeUpCount != correspondingFellAsleepEvents.Count())
-                            throw new InvalidOperationException("Nešto ne štima u bazi. Najebo si, useru moj!");
-
-                        for (int i = 0; i < wakeUpCount; i++)
+                        if (wakeUpCount > correspondingFellAsleepEvents.Count())
                         {
-                            DateTime sleepStartTime = correspondingFellAsleepEvents.ElementAt(i).Time;
-                            if (sleepStartTime.Date < today)
-                                sleepStartTime = today; // at midnight
-
-                            totalNapTime += (wakeUpEvents.ElementAt(i).Time - sleepStartTime);
+                            //throw new InvalidOperationException("Nešto ne štima u bazi. Najebo si, useru moj!");
+                            // just log the error and skip the section for now
+                            Console.WriteLine("Error: Data mismatch");
                         }
+                        else
+                        {
+                            for (int i = 0; i < wakeUpCount; i++)
+                            {
+                                DateTime sleepStartTime = correspondingFellAsleepEvents.ElementAt(i).Time;
+                                if (sleepStartTime.Date < today)
+                                    sleepStartTime = today; // at midnight
 
-                        // TODO--nema smisla ako se ovo polje ne updatea svake sekunde/redovito
-                        //DateTime lastWokeUp = context.BaseEvents.Where(item => item.Type == LovroEventType.WokeUp).OrderByDescending(item => item.Time).FirstOrDefault().Time;
-                        //DateTime lastFellAsleep = context.BaseEvents.Where(item => item.Type == LovroEventType.FellAsleep).OrderByDescending(item => item.Time).FirstOrDefault().Time;
-
-                        //if (lastWokeUp < lastFellAsleep) //if sleeping atm
-                        //    totalNapTime += (DateTime.Now - lastFellAsleep);
+                                totalNapTime += (wakeUpEvents.ElementAt(i).Time - sleepStartTime);
+                            }
+                        }
 
                         #endregion
 
-                        diapersChangedCount = context.DiaperChangedEvents.Count(item => item.Time >= today && item.Time < tomorrow);
-                        feedingTimesCount = context.BaseEvents.Count(item => item.Type == LovroEventType.AteFood && item.Time >= today && item.Time < tomorrow);
+                        diapersChangedCount = dataAccess.GetDiaperChangedEvents().Count(item => item.Time >= today && item.Time < tomorrow);
+                        feedingTimesCount = dataAccess.GetBaseEvents().Count(item => item.Type == LovroEventType.AteFood && item.Time >= today && item.Time < tomorrow);
 
                         summaryLabel.Text = string.Concat("Tokom dana ukupno spavao: ", totalNapTime.ToString(@"hh\:mm"), " sati, jeo ", feedingTimesCount, " puta, promijenjeno ", diapersChangedCount, " pelena");
 
@@ -418,22 +422,21 @@ namespace LovroLog
 
         private void RefreshStopwatch(object state)
         {
-            if (logListView.InvokeRequired)
-            {
+            if (logListView.InvokeRequired){
                 RefreshControlCallback callback = new RefreshControlCallback(RefreshStopwatch);
                 if (!this.Disposing)
                     this.Invoke(callback, new object[] { null });
             }
             else
             {
-                using (var context = new LovroContext(connectionString))
+                using (var dataAccessWrapper = new DataAccessWrapper(LovroAppSettings.DataAccessDetails, LovroAppSettings.UseXMLDatabase))
                 {
                     TimeSpan timeExpired;
 
-                    LovroDiaperChangedEvent diaperChangedEvent = context.DiaperChangedEvents.OrderByDescending(item => item.Time).FirstOrDefault();
+                    LovroDiaperChangedEvent diaperChangedEvent = dataAccessWrapper.GetDiaperChangedEvents().OrderByDescending(item => item.Time).FirstOrDefault();
                     if (diaperChangedEvent != null)
                     {
-                        timeExpired = DateTime.Now - context.DiaperChangedEvents.OrderByDescending(item => item.Time).FirstOrDefault().Time;
+                        timeExpired = DateTime.Now - dataAccessWrapper.GetDiaperChangedEvents().OrderByDescending(item => item.Time).FirstOrDefault().Time;
                         stopwatchDiaperLabel.Text = timeExpired.ToString(@"hh\:mm\:ss");
                         if (timeExpired.TotalMinutes > GetDiaperChangeWarningLimitInMinutes())
                             stopwatchDiaperLabel.ForeColor = Color.Red;
@@ -441,8 +444,11 @@ namespace LovroLog
                             stopwatchDiaperLabel.ForeColor = Color.Black;
                     }
 
-                    DateTime lastWokeUp = context.BaseEvents.Where(item => item.Type == LovroEventType.WokeUp).OrderByDescending(item => item.Time).FirstOrDefault().Time;
-                    DateTime lastFellAsleep = context.BaseEvents.Where(item => item.Type == LovroEventType.FellAsleep).OrderByDescending(item => item.Time).FirstOrDefault().Time;
+                    LovroBaseEvent lastWokeUpEvent = dataAccessWrapper.GetBaseEvents().Where(item => item.Type == LovroEventType.WokeUp).OrderByDescending(item => item.Time).FirstOrDefault();
+                    DateTime lastWokeUp = lastWokeUpEvent != null ? lastWokeUpEvent.Time : DateTime.MinValue;
+
+                    LovroBaseEvent lastFellAsleepEvent = dataAccessWrapper.GetBaseEvents().Where(item => item.Type == LovroEventType.FellAsleep).OrderByDescending(item => item.Time).FirstOrDefault();
+                    DateTime lastFellAsleep = lastFellAsleepEvent != null ? lastFellAsleepEvent.Time : DateTime.MinValue;
 
                     if (lastWokeUp > lastFellAsleep) //if not sleeping atm
                     {
@@ -452,7 +458,8 @@ namespace LovroLog
                     else
                         stopwatchSleepLabel.Text = "00:00:00";
 
-                    timeExpired = DateTime.Now - context.BaseEvents.Where(item => item.Type == LovroEventType.AteFood).OrderByDescending(item => item.Time).FirstOrDefault().Time;
+                    LovroBaseEvent lastAteFoodEvent = dataAccessWrapper.GetBaseEvents().Where(item => item.Type == LovroEventType.AteFood).OrderByDescending(item => item.Time).FirstOrDefault();
+                    timeExpired = lastAteFoodEvent != null ? (DateTime.Now - lastAteFoodEvent.Time) : new TimeSpan(0);
                     stopwatchFoodLabel.Text = timeExpired.ToString(@"hh\:mm\:ss");
                 }
             }
@@ -465,32 +472,34 @@ namespace LovroLog
 
         private void CheckSoundWarning(object state)
         {
-            using (var context = new LovroContext(connectionString))
+            using (var dataAccessWrapper = new DataAccessWrapper(LovroAppSettings.DataAccessDetails, LovroAppSettings.UseXMLDatabase))
             {
-                LovroDiaperChangedEvent lastDiaperChangedEvent = context.DiaperChangedEvents.OrderByDescending(item => item.Time).FirstOrDefault();
+                LovroDiaperChangedEvent lastDiaperChangedEvent = dataAccessWrapper.GetDiaperChangedEvents().OrderByDescending(item => item.Time).FirstOrDefault();
+                DateTime now = DateTime.Now;
 
-                //if (!ignoreWarnings && lastDiaperChangedEvent != null && DateTime.Now > lastDiaperChangedEvent.Time.AddMinutes(GetDiaperChangeWarningLimitInMinutes()))
-                if (lastDiaperChangedEvent != null && DateTime.Now > lastDiaperChangedEvent.Time.AddMinutes(GetDiaperChangeWarningLimitInMinutes()))
+                if (lastDiaperChangedEvent != null && now > lastDiaperChangedEvent.Time.AddMinutes(GetDiaperChangeWarningLimitInMinutes()))
                 {
-                    if (!ignoreWarnings || warningLastSet > warningLastIgnored) // ??? WTF? TODO
+                    if (lastWarningConditionSetRelatedToDiaperChangeAt < lastDiaperChangedEvent.Time)
                     {
                         player = new System.Media.SoundPlayer(@"c:\windows\media\Windows Battery Critical.wav");
-                        player.PlayLooping();
+
+                        if (!SilentModeCheckBox.Checked && now.Hour > LovroAppSettings.SilentAlarmBefore && now.Hour < LovroAppSettings.SilentAlarmAfter)
+                            player.PlayLooping();
+                        
+                        lastWarningConditionSetRelatedToDiaperChangeAt = lastDiaperChangedEvent.Time;
 
                         if (!warningDisplayed)
                         {
-                            warningLastSet = DateTime.Now;
+                            lastWarningConditionSetRelatedToDiaperChangeAt = lastDiaperChangedEvent.Time;
                             using (var form = new ShowWarningForm())
                             {
                                 warningDisplayed = true;
                                 var result = form.ShowDialog();
                                 if (result == DialogResult.OK && player != null)
                                 {
+                                    warningDisplayed = false;
                                     player.Stop();
                                     player.Dispose();
-                                    ignoreWarnings = true;
-                                    warningLastIgnored = DateTime.Now;
-                                    warningLastSet = DateTime.MinValue;
                                 }
                             }
                         }
@@ -559,20 +568,21 @@ namespace LovroLog
         private void DeleteEvents()
         {
             if (logListView.SelectedItems.Count < 1)
+            {
+                MessageBox.Show("Nijedan unos nije odabran.");
                 return;
+            }
 
             if (MessageBox.Show(string.Concat("Sigurno želiš obrisati odabrane unose? (", logListView.SelectedItems.Count, " komad(a))"), "Upozorenje", MessageBoxButtons.OKCancel) != DialogResult.OK)
                 return;
 
-            using (var context = new LovroContext(connectionString))
+            using (var dataAccessWrapper = new DataAccessWrapper(LovroAppSettings.DataAccessDetails, LovroAppSettings.UseXMLDatabase))
             {
                 var toBeDeletedIDs = logListView.SelectedItems.Cast<ListViewItem>().Select(item => (int)item.Tag);
-                var toBeDeletedItems = context.BaseEvents.Where(item => toBeDeletedIDs.Contains(item.ID));
+                var toBeDeletedItems = dataAccessWrapper.GetBaseEvents().Where(item => toBeDeletedIDs.Contains(item.ID));
 
                 foreach (LovroBaseEvent lovroEvent in toBeDeletedItems)
-                    context.BaseEvents.Remove(lovroEvent);
-
-                context.SaveChanges();
+                    dataAccessWrapper.DeleteBaseEvent(lovroEvent.ID);
             }
         }
 
@@ -592,9 +602,9 @@ namespace LovroLog
 
         private void EditEvent(int eventID)
         {
-            using (var context = new LovroContext(connectionString))
+            using (var dataAccessWrapper = new DataAccessWrapper(LovroAppSettings.DataAccessDetails, LovroAppSettings.UseXMLDatabase))
             {
-                LovroBaseEvent eventInEditing = context.BaseEvents.FirstOrDefault(item => item.ID == eventID);
+                LovroBaseEvent eventInEditing = dataAccessWrapper.GetBaseEvents().FirstOrDefault(item => item.ID == eventID);
 
                 if (eventInEditing == null)
                     throw new InvalidOperationException("Nepostojeći unos!");
@@ -603,7 +613,7 @@ namespace LovroLog
                 {
                     editForm.EventInEditing = eventInEditing;
                     if (editForm.ShowDialog() == DialogResult.OK) // eventInEditing properties will be changed in the dialog
-                        context.SaveChanges();
+                        dataAccessWrapper.EditBaseEvent(eventInEditing);
                 }
             }
         }
@@ -676,6 +686,255 @@ namespace LovroLog
         private void ForceRefresh()
         {
             lastRedraw = DateTime.MinValue;
+        }
+
+        private void logListView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode.HasFlag(Keys.Delete))
+                DeleteEvents();
+
+            if (e.KeyCode.HasFlag(Keys.F2))
+                EditEvent();
+        }
+
+        private void DoViewSleepChart()
+        {
+            using (var form = new SleepChartForm(LovroAppSettings.DataAccessDetails, LovroAppSettings.UseXMLDatabase, displayedDatePicker.Value.Date))
+            {
+                var result = form.ShowDialog();
+                if (form.GoToDate.HasValue)
+                    displayedDatePicker.Value = form.GoToDate.Value;
+            }
+        }
+
+        private void viewSleepChartButton_Click(object sender, EventArgs e)
+        {
+            DoViewSleepChart();
+        }
+
+        private void DoDisplayErrors()
+        {
+            erroneousEvents = new Dictionary<int, DateTime>();
+
+            using (var dataAccessWrapper = new DataAccessWrapper(LovroAppSettings.DataAccessDetails, LovroAppSettings.UseXMLDatabase))
+            {
+                List<LovroBaseEvent> napEvents = dataAccessWrapper.GetBaseEvents().Where(item => item.Type == LovroEventType.FellAsleep || item.Type == LovroEventType.WokeUp).OrderBy(item => item.Time).ToList();
+
+                bool typeChanged = true, firstGo = true;
+                LovroEventType lastType = LovroEventType.FellAsleep; // svejedno
+                foreach (LovroBaseEvent lovroEvent in napEvents)
+                {
+                    typeChanged = false;
+
+                    if (firstGo || lastType != lovroEvent.Type)
+                        typeChanged = true;
+
+                    if (!typeChanged)
+                        erroneousEvents.Add(lovroEvent.ID, lovroEvent.Time);
+
+                    firstGo = false;
+                    lastType = lovroEvent.Type;
+                }
+            }
+
+            using (var errorsDisplayForm = new ErroneousEventsListForm(erroneousEvents))
+            {
+                errorSelectedItemID = null;
+                errorsDisplayForm.ShowDialog();
+                if (errorsDisplayForm.SelectedDate.HasValue)
+                {
+                    errorSelectedItemID = errorsDisplayForm.SelectedItemID;
+                    displayedDatePicker.Value = errorsDisplayForm.SelectedDate.Value;
+                }
+            }
+        }
+
+        private void DisplayErrorsButton_Click(object sender, EventArgs e)
+        {
+            DoDisplayErrors();
+        }
+
+        private void PointToErroneousEvent()
+        {
+            logListView.Select();
+            logListView.SelectedItems.Clear();
+
+            if (errorSelectedItemID.HasValue)
+                foreach (ListViewItem item in logListView.Items)
+                {
+                    if ((int)item.Tag == errorSelectedItemID.Value)
+                    {
+                        item.Selected = true;
+                        break;
+                    }
+                }
+            errorSelectedItemID = null;
+        }
+
+        private void LovroLogForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            config.AppSettings.Settings["SilentAlarmAlways"].Value = SilentModeCheckBox.Checked.ToString();
+            config.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("appSettings");
+        }
+
+        private void ToggleSoundButton_Click(object sender, EventArgs e)
+        {
+            SetSoundAlarmControls(!SilentModeCheckBox.Checked);
+        }
+
+        private void goToTodayButton_Click(object sender, EventArgs e)
+        {
+            displayedDatePicker.Value = DateTime.Now;
+        }
+        
+        private void LovroLogForm_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                contextMenuStrip1.Show(this.Location.X + e.X, this.Location.Y + e.Y);
+            }
+        }
+
+        private void ViewReportMenuItem_Click(object sender, EventArgs e)
+        {
+            DoViewSleepChart();
+        }
+
+        private void ViewErrorsMenuItem_Click(object sender, EventArgs e)
+        {
+            DoDisplayErrors();
+        }
+
+        private void ToggleSoundOnOffMenuItem_Click(object sender, EventArgs e)
+        {
+            SetSoundAlarmControls(!SilentModeCheckBox.Checked);
+        }
+
+        private void EditDetailsMenuItem_Click(object sender, EventArgs e)
+        {
+            askForDetailsCheckBox.Checked = !askForDetailsCheckBox.Checked;
+
+            if (askForDetailsCheckBox.Checked)
+                (sender as ToolStripMenuItem).Image = Resources.check_20 as Image;
+            else
+                (sender as ToolStripMenuItem).Image = null;
+        }
+
+        private void AteFoodToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FoodButton_Click(sender, e);
+        }
+
+        private void FellAsleepToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FellAsleep_Click(sender, e);
+        }
+
+        private void WokeUpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WokeUpButton_Click(sender, e);
+        }
+
+        private void PoopyDiaperToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PoopyDiaperChangedButton_Click(sender, e);
+        }
+
+        private void WetDiaperToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WetDiaperChangedButton_Click(sender, e);
+        }
+
+        private void OtherEventToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            otherEventButton_Click(sender, e);
+        }
+
+        private void ToggleSoundToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetSoundAlarmControls(!SilentModeCheckBox.Checked);
+        }
+
+        private void EditDetailsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EditDetailsMenuItem_Click(sender, e);
+        }
+
+        private void SleepChartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DoViewSleepChart();
+        }
+
+        private void ViewErrorsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DoDisplayErrors();
+        }
+
+        private void EditEntryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EditEvent();
+        }
+
+        private void DeleteEntryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DeleteEvents();
+        }
+
+        private void ImportFromXMLMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var fileDialog = new OpenFileDialog() { Multiselect = false })
+            {
+                if (fileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    ImportFromXML(fileDialog.FileName);
+                }
+            }
+        }
+
+        private void ExportToXMLMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var fileDialog = new OpenFileDialog() { Multiselect = false })
+            {
+                if (fileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    ExportToXML(fileDialog.FileName);
+                }
+            }
+        }
+
+        private void ImportFromXML(string filePath)
+        {
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException("The source XML file could not be found.");
+
+            if (MessageBox.Show("Jeste li sigurni da želite uvesti podatke iz odabrane datoteke?", "Upozorenje", MessageBoxButtons.OKCancel) != DialogResult.OK)
+                return;
+
+            using (var dataAccess = new DataAccessWrapper(LovroAppSettings.DataAccessDetails, LovroAppSettings.UseXMLDatabase))
+            {
+                using (var dataToImport = new DataAccessXML(filePath))
+                {
+                    // no merging of events based on ID! IDs from the import file will be ignored and all items found in file will be added to the database as new entries
+                    dataToImport.GetBaseEvents().ToList().ForEach(lovroEvent => dataAccess.AddBaseEvent(lovroEvent));
+                }
+            }
+        }
+
+        private void ExportToXML(string filePath)
+        {
+            if (File.Exists(filePath))
+                if (MessageBox.Show("Odredišna datoteka već postoji. Nastaviti?", "Upozorenje", MessageBoxButtons.OKCancel) != DialogResult.OK)
+                    return;
+
+            using (var dataAccess = new DataAccessWrapper(LovroAppSettings.DataAccessDetails, LovroAppSettings.UseXMLDatabase))
+            {
+                using (var dataToExport = new DataAccessXML(filePath))
+                {
+                    dataToExport.LoadBaseEvents(dataAccess.GetBaseEvents().ToList());
+                }
+            }
         }
     }
 }

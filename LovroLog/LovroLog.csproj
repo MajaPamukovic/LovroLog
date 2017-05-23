@@ -54,16 +54,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AskForDetailsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AskForDetailsForm.Designer.cs">
-      <DependentUpon>AskForDetailsForm.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Database\DataAccessWrapper.cs" />
+    <Compile Include="Database\DataAccessXML.cs" />
     <Compile Include="Database\DatabaseSummary.cs" />
     <Compile Include="Database\IDataAccess.cs" />
     <Compile Include="Enums\LovroDiaperStatus.cs" />
     <Compile Include="Enums\LovroEventType.cs" />
+    <Compile Include="ErroneousEventsListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ErroneousEventsListForm.Designer.cs">
+      <DependentUpon>ErroneousEventsListForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LovroAppSettings.cs" />
     <Compile Include="LovroBaseEventControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -77,6 +80,8 @@
     <Compile Include="LovroEventEditForm.Designer.cs">
       <DependentUpon>LovroEventEditForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="LovroEvents\LovroEventList.cs" />
+    <Compile Include="LovroEvents\LovroWeighInEvent.cs" />
     <Compile Include="LovroLogForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,8 +98,14 @@
     <Compile Include="ShowWarningForm.Designer.cs">
       <DependentUpon>ShowWarningForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AskForDetailsForm.resx">
-      <DependentUpon>AskForDetailsForm.cs</DependentUpon>
+    <Compile Include="SleepChartForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SleepChartForm.Designer.cs">
+      <DependentUpon>SleepChartForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="ErroneousEventsListForm.resx">
+      <DependentUpon>ErroneousEventsListForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LovroBaseEventControl.resx">
       <DependentUpon>LovroBaseEventControl.cs</DependentUpon>
@@ -117,6 +128,9 @@
     </Compile>
     <EmbeddedResource Include="ShowWarningForm.resx">
       <DependentUpon>ShowWarningForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SleepChartForm.resx">
+      <DependentUpon>SleepChartForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -151,6 +165,12 @@
     <None Include="Resursi\diaper-wet-60.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resursi\digital-7 %28italic%29.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resursi\digital-7.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resursi\food-20px.png" />
   </ItemGroup>
   <ItemGroup>
@@ -176,6 +196,10 @@
     <None Include="Resursi\wakeUp-transparent-60px.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resursi\sound-off2-20.png" />
+    <None Include="Resursi\sound-off-20.png" />
+    <None Include="Resursi\sound-20.png" />
+    <None Include="Resursi\sound-32.png" />
     <None Include="Resursi\plus3d-gray-35px.png" />
     <None Include="Resursi\plus3d-35px.png" />
     <None Include="Resursi\minus3d-gray-35px.png" />
@@ -187,6 +211,13 @@
     <None Include="Resursi\frog-bright-2.png" />
     <None Include="Resursi\frog-bright.png" />
     <None Include="Resursi\ellipsis-60px.png" />
+    <None Include="Resursi\chart-60.png" />
+    <None Include="Resursi\chart-32.png" />
+    <None Include="Resursi\chart-20.png" />
+    <None Include="Resursi\errorViewer-20.png" />
+    <None Include="Resursi\check-20.png" />
+    <None Include="Resursi\ellipsis-20px.png" />
+    <Content Include="Database\SqlServerProcedures.sql" />
     <Content Include="Resursi\frog-icon-semitransparent.png" />
     <None Include="Resursi\edit-darker-20px.png" />
     <None Include="Resursi\edit-60px.png" />

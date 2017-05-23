@@ -25,5 +25,12 @@ namespace LovroLog.LovroEvents
         public LovroEventType Type { get; set; }
         public DateTime Time { get; set; }
         public string Note { get; set; }
+
+        public void CopyProperties(LovroBaseEvent editedEvent)
+        {
+            this.Time = editedEvent.Time;
+            this.Type = editedEvent.Type;
+            this.Note = editedEvent.Note;
+        }
     }
 }

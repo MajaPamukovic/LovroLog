@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AskForDetailsForm));
             this.noteTextBox = new System.Windows.Forms.TextBox();
             this.OkNoteBtn = new System.Windows.Forms.Button();
             this.CancelNoteBtn = new System.Windows.Forms.Button();
@@ -103,6 +104,7 @@
             this.Controls.Add(this.CancelNoteBtn);
             this.Controls.Add(this.OkNoteBtn);
             this.Controls.Add(this.noteTextBox);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AskForDetailsForm";
             this.Text = "Uredi detalje";
             this.Load += new System.EventHandler(this.AskForDetailsForm_Load);
