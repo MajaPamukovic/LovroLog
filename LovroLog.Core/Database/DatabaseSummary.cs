@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LovroLog
+namespace LovroLog.Core.Database
 {
     public class DatabaseSummary
     {

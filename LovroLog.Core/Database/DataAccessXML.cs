@@ -1,4 +1,5 @@
-﻿using LovroLog.LovroEvents;
+﻿using LovroLog.Core.LovroEvents;
+using LovroLog.LovroEvents;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace LovroLog.Database
+namespace LovroLog.Core.Database
 {
     public class DataAccessXML : IDataAccess
     {
