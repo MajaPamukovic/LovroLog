@@ -33,7 +33,7 @@ namespace LovroLog.Database
 
         public DataAccessXML()
         {
-            this.serializer = new XmlSerializer(typeof(List<LovroBaseEvent>), new Type[] { typeof(LovroBaseEvent), typeof(LovroDiaperChangedEvent), typeof(LovroWeighInEvent) });
+            this.serializer = new XmlSerializer(typeof(LovroEventList), new Type[] { typeof(LovroBaseEvent), typeof(LovroDiaperChangedEvent), typeof(LovroWeighInEvent) });
         }
 
         public DataAccessXML(string dataAccessDetails)
@@ -47,13 +47,13 @@ namespace LovroLog.Database
         public IEnumerable<LovroBaseEvent> GetBaseEvents()
         {
             if (!File.Exists(DataAccessDetails))
-                return new List<LovroBaseEvent>();
+                return new LovroEventList();
 
-            List<LovroBaseEvent> result;
+            LovroEventList result;
 
             using (var fileStream = new FileStream(DataAccessDetails, FileMode.Open))
             {
-                result = serializer.Deserialize(fileStream) as List<LovroBaseEvent>;
+                result = serializer.Deserialize(fileStream) as LovroEventList;
             }
 
             return result;
