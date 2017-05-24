@@ -1,7 +1,6 @@
 ﻿using LovroLog.Core.Database;
 using LovroLog.Core.Enums;
 using LovroLog.Core.LovroEvents;
-using LovroLog.LovroEvents;
 using LovroLog.LovroLogServiceReference;
 using System;
 using System.Collections.Generic;

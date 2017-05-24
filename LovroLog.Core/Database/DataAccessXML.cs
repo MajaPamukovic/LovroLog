@@ -52,7 +52,7 @@ namespace LovroLog.Core.Database
 
             LovroEventList result;
 
-            using (var fileStream = new FileStream(DataAccessDetails, FileMode.Open))
+            using (var fileStream = new FileStream(DataAccessDetails, FileMode.Open, FileAccess.Read))
             {
                 result = serializer.Deserialize(fileStream) as LovroEventList;
             }
