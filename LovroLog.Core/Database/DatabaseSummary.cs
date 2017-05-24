@@ -10,7 +10,10 @@ namespace LovroLog.Core.Database
     [DataContract]
     public class DatabaseSummary
     {
+        [DataMember]
         public DateTime LastModified { get; set; }
+
+        [DataMember]
         public int ID { get; set; }
     }
 }

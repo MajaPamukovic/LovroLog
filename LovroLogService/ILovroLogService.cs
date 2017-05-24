@@ -9,13 +9,6 @@ namespace LovroLogService
     [ServiceContract]
     public interface ILovroLogService
     {
-
-        //[OperationContract]
-        //string GetData(int value);
-
-        //[OperationContract]
-        //CompositeType GetDataUsingDataContract(CompositeType composite);
-
         [OperationContract]
         IEnumerable<LovroBaseEvent> GetBaseEvents();
 
@@ -33,26 +26,5 @@ namespace LovroLogService
 
         [OperationContract]
         void DeleteBaseEvent(int id);
-    }
-
-    [DataContract]
-    public class CompositeType
-    {
-        bool boolValue = true;
-        string stringValue = "Hello ";
-
-        [DataMember]
-        public bool BoolValue
-        {
-            get { return boolValue; }
-            set { boolValue = value; }
-        }
-
-        [DataMember]
-        public string StringValue
-        {
-            get { return stringValue; }
-            set { stringValue = value; }
-        }
     }
 }

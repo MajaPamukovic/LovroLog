@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LovroLog", "LovroLog\LovroLog.csproj", "{74D48284-CD91-4F4C-A4B8-8341FB2A9646}"
+	ProjectSection(ProjectDependencies) = postProject
+		{54B59860-0D31-41F1-91F9-7BD77BE98549} = {54B59860-0D31-41F1-91F9-7BD77BE98549}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LovroLogService", "LovroLogService\LovroLogService.csproj", "{54B59860-0D31-41F1-91F9-7BD77BE98549}"
 EndProject

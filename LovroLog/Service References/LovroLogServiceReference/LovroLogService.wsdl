@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="LovroLogService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:63740/LovroLogService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:63740/LovroLogService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:63740/LovroLogService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/LovroLog.Core.LovroEvents" />
+      <xsd:import schemaLocation="http://localhost:63740/LovroLogService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/LovroLog.Core.Enums" />
+      <xsd:import schemaLocation="http://localhost:63740/LovroLogService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/LovroLog.Core.Database" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ILovroLogService_GetBaseEvents_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBaseEvents" />
+  </wsdl:message>
+  <wsdl:message name="ILovroLogService_GetBaseEvents_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBaseEventsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILovroLogService_GetDiaperChangedEvents_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetDiaperChangedEvents" />
+  </wsdl:message>
+  <wsdl:message name="ILovroLogService_GetDiaperChangedEvents_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDiaperChangedEventsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILovroLogService_GetSummary_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSummary" />
+  </wsdl:message>
+  <wsdl:message name="ILovroLogService_GetSummary_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSummaryResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILovroLogService_AddBaseEvent_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddBaseEvent" />
+  </wsdl:message>
+  <wsdl:message name="ILovroLogService_AddBaseEvent_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddBaseEventResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILovroLogService_EditBaseEvent_InputMessage">
+    <wsdl:part name="parameters" element="tns:EditBaseEvent" />
+  </wsdl:message>
+  <wsdl:message name="ILovroLogService_EditBaseEvent_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EditBaseEventResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILovroLogService_DeleteBaseEvent_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteBaseEvent" />
+  </wsdl:message>
+  <wsdl:message name="ILovroLogService_DeleteBaseEvent_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteBaseEventResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ILovroLogService">
+    <wsdl:operation name="GetBaseEvents">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILovroLogService/GetBaseEvents" message="tns:ILovroLogService_GetBaseEvents_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILovroLogService/GetBaseEventsResponse" message="tns:ILovroLogService_GetBaseEvents_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDiaperChangedEvents">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILovroLogService/GetDiaperChangedEvents" message="tns:ILovroLogService_GetDiaperChangedEvents_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILovroLogService/GetDiaperChangedEventsResponse" message="tns:ILovroLogService_GetDiaperChangedEvents_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSummary">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILovroLogService/GetSummary" message="tns:ILovroLogService_GetSummary_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILovroLogService/GetSummaryResponse" message="tns:ILovroLogService_GetSummary_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddBaseEvent">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILovroLogService/AddBaseEvent" message="tns:ILovroLogService_AddBaseEvent_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILovroLogService/AddBaseEventResponse" message="tns:ILovroLogService_AddBaseEvent_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EditBaseEvent">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILovroLogService/EditBaseEvent" message="tns:ILovroLogService_EditBaseEvent_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILovroLogService/EditBaseEventResponse" message="tns:ILovroLogService_EditBaseEvent_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBaseEvent">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILovroLogService/DeleteBaseEvent" message="tns:ILovroLogService_DeleteBaseEvent_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILovroLogService/DeleteBaseEventResponse" message="tns:ILovroLogService_DeleteBaseEvent_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_ILovroLogService" type="tns:ILovroLogService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetBaseEvents">
+      <soap:operation soapAction="http://tempuri.org/ILovroLogService/GetBaseEvents" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDiaperChangedEvents">
+      <soap:operation soapAction="http://tempuri.org/ILovroLogService/GetDiaperChangedEvents" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSummary">
+      <soap:operation soapAction="http://tempuri.org/ILovroLogService/GetSummary" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddBaseEvent">
+      <soap:operation soapAction="http://tempuri.org/ILovroLogService/AddBaseEvent" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EditBaseEvent">
+      <soap:operation soapAction="http://tempuri.org/ILovroLogService/EditBaseEvent" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBaseEvent">
+      <soap:operation soapAction="http://tempuri.org/ILovroLogService/DeleteBaseEvent" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="LovroLogService">
+    <wsdl:port name="BasicHttpBinding_ILovroLogService" binding="tns:BasicHttpBinding_ILovroLogService">
+      <soap:address location="http://localhost:63740/LovroLogService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

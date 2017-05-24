@@ -23,6 +23,7 @@ namespace LovroLog.Core.LovroEvents
             Status = status;
         }
 
+        [DataMember]
         public LovroDiaperStatus Status { get; set; }
     }
 }

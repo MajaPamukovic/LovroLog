@@ -97,6 +97,7 @@
       <DependentUpon>LovroLogService.svc</DependentUpon>
     </Compile>
     <Compile Include="ILovroLogService.cs" />
+    <Compile Include="LovroServiceSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

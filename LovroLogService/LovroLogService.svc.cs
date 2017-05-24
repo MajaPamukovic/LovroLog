@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LovroLog.Core.Database;
+using LovroLog.Core.LovroEvents;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -8,26 +10,54 @@ using System.Text;
 
 namespace LovroLogService
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in code, svc and config file together.
-    // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     public class LovroLogService : ILovroLogService
     {
-        public string GetData(int value)
+        public IEnumerable<LovroBaseEvent> GetBaseEvents()
         {
-            return string.Format("You entered: {0}", value);
+            using (var dataAccess = new DataAccessWrapper(LovroServiceSettings.DataAccessDetails, LovroServiceSettings.UseXMLDatabase))
+            {
+                return dataAccess.GetBaseEvents();
+            }
         }
 
-        public CompositeType GetDataUsingDataContract(CompositeType composite)
+        public IEnumerable<LovroDiaperChangedEvent> GetDiaperChangedEvents()
         {
-            if (composite == null)
+            using (var dataAccess = new DataAccessWrapper(LovroServiceSettings.DataAccessDetails, LovroServiceSettings.UseXMLDatabase))
             {
-                throw new ArgumentNullException("composite");
+                return dataAccess.GetDiaperChangedEvents();
             }
-            if (composite.BoolValue)
+        }
+
+        public DatabaseSummary GetSummary()
+        {
+            using (var dataAccess = new DataAccessWrapper(LovroServiceSettings.DataAccessDetails, LovroServiceSettings.UseXMLDatabase))
             {
-                composite.StringValue += "Suffix";
+                return dataAccess.GetSummary();
             }
-            return composite;
+        }
+
+        public LovroBaseEvent AddBaseEvent(LovroBaseEvent newEvent)
+        {
+            using (var dataAccess = new DataAccessWrapper(LovroServiceSettings.DataAccessDetails, LovroServiceSettings.UseXMLDatabase))
+            {
+                return dataAccess.AddBaseEvent(newEvent);
+            }
+        }
+
+        public LovroBaseEvent EditBaseEvent(LovroBaseEvent editedEvent)
+        {
+            using (var dataAccess = new DataAccessWrapper(LovroServiceSettings.DataAccessDetails, LovroServiceSettings.UseXMLDatabase))
+            {
+                return dataAccess.EditBaseEvent(editedEvent);
+            }
+        }
+
+        public void DeleteBaseEvent(int id)
+        {
+            using (var dataAccess = new DataAccessWrapper(LovroServiceSettings.DataAccessDetails, LovroServiceSettings.UseXMLDatabase))
+            {
+                dataAccess.DeleteBaseEvent(id);
+            }
         }
     }
 }

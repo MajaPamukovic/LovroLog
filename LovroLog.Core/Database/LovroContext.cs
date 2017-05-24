@@ -1,5 +1,4 @@
 ﻿using LovroLog.Core.LovroEvents;
-using LovroLog.LovroEvents;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;

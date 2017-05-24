@@ -1,14 +1,7 @@
-﻿using LovroLog.Core;
-using LovroLog.Core.Enums;
-using LovroLog.Core.LovroEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using LovroLog.Core.Enums;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace LovroLog.LovroEvents
+namespace LovroLog.Core.LovroEvents
 {
     [DataContract]
     public class LovroWeighInEvent : LovroBaseEvent
@@ -27,8 +20,13 @@ namespace LovroLog.LovroEvents
             HeadCircumference = headCircumference;
         }
 
+        [DataMember]
         public double Weight { get; set; }
+
+        [DataMember]
         public double Height { get; set; }
+
+        [DataMember]
         public double HeadCircumference { get; set; }
     }
 }
