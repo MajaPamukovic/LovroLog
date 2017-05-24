@@ -1,7 +1,6 @@
 ﻿using LovroLog.Core.Database;
 using LovroLog.Core.LovroEvents;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.ServiceModel;
 
 namespace LovroLogService

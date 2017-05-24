@@ -1,15 +1,11 @@
-﻿using LovroLog.Core.Database;
-using LovroLog.Core.Enums;
+﻿using LovroLog.Core.Enums;
 using LovroLog.Core.LovroEvents;
 using LovroLog.LovroLogServiceReference;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LovroLog
