@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/LovroLog.Core.Enums" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/LovroLog.Core.Enums" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="LovroEventType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Default" />
+      <xs:enumeration value="Pooped" />
+      <xs:enumeration value="AteFood" />
+      <xs:enumeration value="FellAsleep" />
+      <xs:enumeration value="WokeUp" />
+      <xs:enumeration value="DiaperChanged" />
+      <xs:enumeration value="Bathed" />
+      <xs:enumeration value="Other" />
+      <xs:enumeration value="WeighIn" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="LovroEventType" nillable="true" type="tns:LovroEventType" />
+  <xs:simpleType name="LovroDiaperStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Clean" />
+      <xs:enumeration value="Pissed" />
+      <xs:enumeration value="Soiled" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="LovroDiaperStatus" nillable="true" type="tns:LovroDiaperStatus" />
+</xs:schema>

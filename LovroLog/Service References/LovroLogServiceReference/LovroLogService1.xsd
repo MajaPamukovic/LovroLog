@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/LovroLog.Core.LovroEvents" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/LovroLog.Core.LovroEvents" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:63740/LovroLogService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/LovroLog.Core.Enums" />
+  <xs:complexType name="ArrayOfLovroBaseEvent">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LovroBaseEvent" nillable="true" type="tns:LovroBaseEvent" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLovroBaseEvent" nillable="true" type="tns:ArrayOfLovroBaseEvent" />
+  <xs:complexType name="LovroBaseEvent">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ID" type="xs:int" />
+      <xs:element minOccurs="0" name="Note" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Time" type="xs:dateTime" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/LovroLog.Core.Enums" minOccurs="0" name="Type" type="q1:LovroEventType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LovroBaseEvent" nillable="true" type="tns:LovroBaseEvent" />
+  <xs:complexType name="ArrayOfLovroDiaperChangedEvent">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LovroDiaperChangedEvent" nillable="true" type="tns:LovroDiaperChangedEvent" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLovroDiaperChangedEvent" nillable="true" type="tns:ArrayOfLovroDiaperChangedEvent" />
+  <xs:complexType name="LovroDiaperChangedEvent">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:LovroBaseEvent">
+        <xs:sequence>
+          <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/LovroLog.Core.Enums" minOccurs="0" name="Status" type="q2:LovroDiaperStatus" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="LovroDiaperChangedEvent" nillable="true" type="tns:LovroDiaperChangedEvent" />
+</xs:schema>

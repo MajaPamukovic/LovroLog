@@ -1,11 +1,11 @@
-﻿using LovroLog.LovroEvents;
+﻿using LovroLog.Core.LovroEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LovroLog.Database
+namespace LovroLog.Core.Database
 {
     public interface IDataAccess : IDisposable
     {

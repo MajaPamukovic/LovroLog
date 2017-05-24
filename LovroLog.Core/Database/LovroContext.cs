@@ -1,5 +1,4 @@
-﻿using LovroLog.Database;
-using LovroLog.LovroEvents;
+﻿using LovroLog.Core.LovroEvents;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -7,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LovroLog
+namespace LovroLog.Core.Database
 {
     public class LovroContext : DbContext
     {

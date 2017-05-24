@@ -1,12 +1,17 @@
-﻿using LovroLog.Enums;
+﻿using LovroLog.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LovroLog.LovroEvents
+namespace LovroLog.Core.LovroEvents
 {
+    [KnownType(typeof(LovroBaseEvent))]
+    [KnownType(typeof(LovroDiaperChangedEvent))]
+    [KnownType(typeof(LovroWeighInEvent))]
+    [DataContract]
     public class LovroBaseEvent
     {
         public LovroBaseEvent()
@@ -21,9 +26,16 @@ namespace LovroLog.LovroEvents
             Note = note;
         }
 
+        [DataMember]
         public int ID { get; set; }
+
+        [DataMember]
         public LovroEventType Type { get; set; }
+
+        [DataMember]
         public DateTime Time { get; set; }
+
+        [DataMember]
         public string Note { get; set; }
 
         public void CopyProperties(LovroBaseEvent editedEvent)

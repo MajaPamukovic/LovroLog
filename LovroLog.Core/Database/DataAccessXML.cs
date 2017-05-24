@@ -1,13 +1,14 @@
-﻿using LovroLog.LovroEvents;
+﻿using LovroLog.Core.LovroEvents;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace LovroLog.Database
+namespace LovroLog.Core.Database
 {
     public class DataAccessXML : IDataAccess
     {
@@ -51,7 +52,7 @@ namespace LovroLog.Database
 
             LovroEventList result;
 
-            using (var fileStream = new FileStream(DataAccessDetails, FileMode.Open))
+            using (var fileStream = new FileStream(DataAccessDetails, FileMode.Open, FileAccess.Read))
             {
                 result = serializer.Deserialize(fileStream) as LovroEventList;
             }

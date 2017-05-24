@@ -1,9 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LovroLog", "LovroLog\LovroLog.csproj", "{74D48284-CD91-4F4C-A4B8-8341FB2A9646}"
+	ProjectSection(ProjectDependencies) = postProject
+		{54B59860-0D31-41F1-91F9-7BD77BE98549} = {54B59860-0D31-41F1-91F9-7BD77BE98549}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LovroLogService", "LovroLogService\LovroLogService.csproj", "{54B59860-0D31-41F1-91F9-7BD77BE98549}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LovroLog.Core", "LovroLog.Core\LovroLog.Core.csproj", "{19065208-D22B-4C09-809E-D7F12E0CF852}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +22,14 @@ Global
 		{74D48284-CD91-4F4C-A4B8-8341FB2A9646}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74D48284-CD91-4F4C-A4B8-8341FB2A9646}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74D48284-CD91-4F4C-A4B8-8341FB2A9646}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54B59860-0D31-41F1-91F9-7BD77BE98549}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54B59860-0D31-41F1-91F9-7BD77BE98549}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54B59860-0D31-41F1-91F9-7BD77BE98549}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54B59860-0D31-41F1-91F9-7BD77BE98549}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19065208-D22B-4C09-809E-D7F12E0CF852}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19065208-D22B-4C09-809E-D7F12E0CF852}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19065208-D22B-4C09-809E-D7F12E0CF852}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19065208-D22B-4C09-809E-D7F12E0CF852}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

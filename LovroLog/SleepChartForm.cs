@@ -1,6 +1,7 @@
-﻿using LovroLog.Database;
-using LovroLog.Enums;
-using LovroLog.LovroEvents;
+﻿using LovroLog.Core.Database;
+using LovroLog.Core.Enums;
+using LovroLog.Core.LovroEvents;
+using LovroLog.LovroLogServiceReference;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,21 +25,19 @@ namespace LovroLog
         private const int _hoursInDay = 24;
         private const int _hourLabelFontSize = 8;
         private const int _dateLabelFontSize = 10;
-
-        private string connectionString;
-        private bool useXMLDatabase;
+        
+        private LovroLogServiceClient serviceClient;
         private DateTime originalStartDate;
 
         public SleepChartForm()
         {
             InitializeComponent();
         }
-
-        public SleepChartForm(string connectionString, bool useXMLDatabase, DateTime originalStartDate)
+        
+        public SleepChartForm(LovroLogServiceClient serviceClient, DateTime originalStartDate)
             : this()
         {
-            this.connectionString = connectionString;
-            this.useXMLDatabase = useXMLDatabase;
+            this.serviceClient = serviceClient;
             this.originalStartDate = originalStartDate;
             this.GoToDate = null;
         }
@@ -70,47 +69,44 @@ namespace LovroLog
 
         private void DrawChart()
         {
-            if (string.IsNullOrEmpty(connectionString))
+            if (serviceClient == null)
                 return;
 
-            using (var dataAccess = new DataAccessWrapper(connectionString, useXMLDatabase))
+            using (var graphics = this.CreateGraphics())
             {
-                using (var graphics = this.CreateGraphics())
-                {
-                    graphics.Clear(this.BackColor);
-                }
+                graphics.Clear(this.BackColor);
+            }
 
-                List<LovroBaseEvent> eventsList = dataAccess.GetBaseEvents()
-                    .Where(item => 
-                        (item.Type == LovroEventType.FellAsleep || item.Type == LovroEventType.WokeUp) &&
-                        (item.Time.Date >= StartDateSelected && item.Time.Date <= StartDateSelected.AddDays(NumberOfDays)))
-                    .OrderByDescending(item => item.Time)
-                    .OrderBy(item => item.Time)
-                    .ToList();
+            List<LovroBaseEvent> eventsList = serviceClient.GetBaseEvents()
+                .Where(item =>
+                    (item.Type == LovroEventType.FellAsleep || item.Type == LovroEventType.WokeUp) &&
+                    (item.Time.Date >= StartDateSelected && item.Time.Date <= StartDateSelected.AddDays(NumberOfDays)))
+                .OrderByDescending(item => item.Time)
+                .OrderBy(item => item.Time)
+                .ToList();
 
-                List<DateTime> napStartTimes = new List<DateTime>();
-                List<DateTime> napEndTimes = new List<DateTime>();
+            List<DateTime> napStartTimes = new List<DateTime>();
+            List<DateTime> napEndTimes = new List<DateTime>();
 
-                // uz pretpostavku da su dobro posloženi, tj. nema više "Zaspao sam" ili "Probudio sam se" zaredom
-                int startIndex = eventsList.FindIndex(item => item.Type == LovroEventType.FellAsleep);
-                int endIndex = eventsList.FindLastIndex(item => item.Type == LovroEventType.WokeUp);
+            // uz pretpostavku da su dobro posloženi, tj. nema više "Zaspao sam" ili "Probudio sam se" zaredom
+            int startIndex = eventsList.FindIndex(item => item.Type == LovroEventType.FellAsleep);
+            int endIndex = eventsList.FindLastIndex(item => item.Type == LovroEventType.WokeUp);
 
-                if (startIndex < 0 || endIndex < 0)
-                    return;
+            if (startIndex < 0 || endIndex < 0)
+                return;
 
-                for (int i = startIndex; i <= endIndex; i++)
-                {
-                    if (((i - startIndex) % 2) == 0) // fell asleep
-                        napStartTimes.Add(eventsList[i].Time);
-                    else
-                        napEndTimes.Add(eventsList[i].Time);
-                }
+            for (int i = startIndex; i <= endIndex; i++)
+            {
+                if (((i - startIndex) % 2) == 0) // fell asleep
+                    napStartTimes.Add(eventsList[i].Time);
+                else
+                    napEndTimes.Add(eventsList[i].Time);
+            }
 
-                DrawBase(NumberOfDays, StartDateSelected, napStartTimes, napEndTimes);
-                for (int i = 0; i < NumberOfDays; i++)
-                {
-                    DrawDay(i, NumberOfDays, StartDateSelected.AddDays(i), napStartTimes, napEndTimes);
-                }
+            DrawBase(NumberOfDays, StartDateSelected, napStartTimes, napEndTimes);
+            for (int i = 0; i < NumberOfDays; i++)
+            {
+                DrawDay(i, NumberOfDays, StartDateSelected.AddDays(i), napStartTimes, napEndTimes);
             }
         }
 

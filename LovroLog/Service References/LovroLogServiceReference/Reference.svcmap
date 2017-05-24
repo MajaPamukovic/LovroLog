@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="d52876d0-34d8-4ab5-97df-94a81d943ac9" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:63740/LovroLogService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="LovroLogService.xsd" MetadataType="Schema" ID="bedec9f7-d479-494c-9885-19c85ca84e29" SourceId="1" SourceUrl="http://localhost:63740/LovroLogService.svc?xsd=xsd3" />
+    <MetadataFile FileName="LovroLogService1.xsd" MetadataType="Schema" ID="878adf77-268a-4e7d-b7bb-2089c85d3bef" SourceId="1" SourceUrl="http://localhost:63740/LovroLogService.svc?xsd=xsd2" />
+    <MetadataFile FileName="LovroLogService2.xsd" MetadataType="Schema" ID="9beedadd-0dec-4849-9397-6a9aabbfa777" SourceId="1" SourceUrl="http://localhost:63740/LovroLogService.svc?xsd=xsd4" />
+    <MetadataFile FileName="LovroLogService3.xsd" MetadataType="Schema" ID="d21c8147-44a7-48f2-8e95-4c8a85f874c9" SourceId="1" SourceUrl="http://localhost:63740/LovroLogService.svc?xsd=xsd1" />
+    <MetadataFile FileName="LovroLogService.wsdl" MetadataType="Wsdl" ID="51b059c3-f95c-4650-9fa9-8c597cb99fc5" SourceId="1" SourceUrl="http://localhost:63740/LovroLogService.svc?wsdl" />
+    <MetadataFile FileName="LovroLogService4.xsd" MetadataType="Schema" ID="b9d28493-7c5b-4330-8a51-e697454d80c7" SourceId="1" SourceUrl="http://localhost:63740/LovroLogService.svc?xsd=xsd0" />
+    <MetadataFile FileName="LovroLogService.disco" MetadataType="Disco" ID="c4424f02-adcb-4608-99b0-be5e3b968179" SourceId="1" SourceUrl="http://localhost:63740/LovroLogService.svc?disco" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
